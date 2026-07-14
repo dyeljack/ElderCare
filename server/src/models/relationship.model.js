@@ -1,27 +1,20 @@
  import mongoose, {Schema} from "mongoose";
  import { timeStamp } from "console";
  
- const healthRecordSchema = new Schema({
+ const relationshipSchema = new Schema({
     userId: {
          type: String,
          required: true
      },
-    title: {
+    guardianId: {
          type: String,
          required: true
      },
-     description: {
+     status: {
          type: String,
          required: true
      },
-     visibility: {
-         type: String,
-         required: true
-     },
-     fileURL: {
-         type: String,
-     }
  }, {timestamps: true})
  
  
- export const HealthRecord = mongoose.model("HealthRecord", healthRecordSchema)
+ export const Relationship = mongoose.model("Relationship", relationshipSchema)

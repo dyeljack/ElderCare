@@ -1,27 +1,24 @@
  import mongoose, {Schema} from "mongoose";
  import { timeStamp } from "console";
  
- const healthRecordSchema = new Schema({
-    userId: {
+ const verificationSchema = new Schema({
+    caretakerId: {
          type: String,
          required: true
      },
-    title: {
+    documentType: {
          type: String,
          required: true
      },
-     description: {
+    fileURL: {
          type: String,
          required: true
      },
-     visibility: {
+     status: {
          type: String,
          required: true
      },
-     fileURL: {
-         type: String,
-     }
  }, {timestamps: true})
  
  
- export const HealthRecord = mongoose.model("HealthRecord", healthRecordSchema)
+ export const Verification = mongoose.model("Verification", verificationSchema)
