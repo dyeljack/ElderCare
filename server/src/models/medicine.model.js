@@ -3,22 +3,25 @@
  const medicineSchema = new Schema({
     name: {
          type: String,
-         required: true
+         required: true,
+         trim: true
      },
     imageURL: {
          type: String
      },
     description: {
-         type: String
+         type: String,
+          trim: true
      },
     createdBy: {
-         type: String,
-         required: true
+      type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true
      },
     verified: {
          type: Boolean
      }
- })
+ }, {timestamps: true})
  
  
  export const Medicine = mongoose.model("Medicine", medicineSchema)

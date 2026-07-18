@@ -1,25 +1,26 @@
  import mongoose, {Schema} from "mongoose";
- import { Timestamp } from "mongodb";
  
  const scheduleSchema = new Schema({
     userId: {
            type: Schema.Types.ObjectId,
-            ref: "User"
+            ref: "User",
+            required: true
      },
     medicineId: {
          type: Schema.Types.ObjectId,
-            ref: "Medicine"
+            ref: "Medicine",
+            required: true
      },
     time: [{
          type: String,
          required: true
      }],
     startDate: {
-        type: timeStamp,
+        type: Date,
         required: true
     },
     endDate: {
-        type: timeStamp,
+        type: Date,
         required: true
     },
     frequency: {
@@ -28,20 +29,18 @@
      },
     dosage: {
          type: String,
-         required: true
+         required: true,
+         trim: true
      },
     status: {
          type: String,
          required: true
      },
     createdBy: {
-         type: String,
-         required: true
-     },
-    updatedBy: {
-        type: String,
+           type: Schema.Types.ObjectId,
+        ref: "User",
         required: true
-    }
+     }
  }, {timestamps: true})
  
  

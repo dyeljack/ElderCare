@@ -1,23 +1,23 @@
 import mongoose, {Schema} from "mongoose";
 import jwt from "jsonwebtoken";
-import { Timestamp } from "mongodb";
-import { timeStamp } from "console";
 
 const assignmentSchema = new Schema({
     userId: {
         type: Schema.Types.ObjectId,
-        ref: "User"
+        ref: "User",
+        required: true
     },
     caretakerId: {
         type: Schema.Types.ObjectId,
-        ref: "User"
+        ref: "User",
+        required: true
     },
     startDate: {
-        type: timeStamp,
+        type: Date,
         required: true,
     },
     endDate: {
-        type: timeStamp,
+        type: Date,
         required: true,
     },
     status: {

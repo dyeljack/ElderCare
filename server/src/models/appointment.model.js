@@ -1,10 +1,10 @@
 import mongoose, {Schema} from "mongoose";
-import { Timestamp } from "mongodb";
 
 const appointmentSchema = new Schema({
     userId: {
         type: Schema.Types.ObjectId,
-        ref: "User"
+        ref: "User",
+        required: true
     },
     title: {
         type: String,
@@ -14,13 +14,14 @@ const appointmentSchema = new Schema({
     description: {
         type: String,
         required: true,
+        trim: true
     },
     reminderAt: {
-        type: Timestamp, 
+        type: Date, 
         required: true
     },
     time: {
-        type: Timestamp,
+        type: Date,
         required: true,
     },
     location: {
@@ -34,12 +35,9 @@ const appointmentSchema = new Schema({
     }
     },
     createdBy: {
-        type: String, 
-        required: true,
-    },   
-    updatedBy:{
-        type: String,
-        required: true
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true
     }
 },{timestamps: true})
 

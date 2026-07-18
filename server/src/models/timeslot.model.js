@@ -1,14 +1,13 @@
  import mongoose, {Schema} from "mongoose";
- import { time } from "console";
  
  const timeslotSchema = new Schema({
     timeslot:[{
         startTime: {
-            type: time,
+            type: String,
             required: true
         },
         endTime: {
-            type: time,
+            type: String,
             required: true
         },
         available: {
@@ -22,7 +21,8 @@
     }], 
     caretakerId: {
       type: Schema.Types.ObjectId,
-            ref: "User"
+            ref: "User",
+            required: true
      },
  }, {timestamps: true})
  

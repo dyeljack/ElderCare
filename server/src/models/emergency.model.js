@@ -1,10 +1,10 @@
  import mongoose, {Schema} from "mongoose";
- import { Timestamp } from "mongodb";
  
  const emergencySchema = new Schema({
     userId: {
           type: Schema.Types.ObjectId,
-            ref: "User"
+          ref: "User",
+          required: true
      },
     liveLocation: {
         latitude: {
@@ -20,23 +20,15 @@
             required: true
         },
         updatedAt: {
-            type: Timestamp,
+            type: Date,
             required: true
         }
         },
     status: {
          type: String,
          required: true
-     },
-    triggeredAt: {
-         type: timeStamp,
-         required: true
-     },
-    resolvedAt: {
-         type: timeStamp,
-         required: true
-     },
- })
+     }
+ }, { timestamps: true })
  
  
  export const Emergency = mongoose.model("Emergency", emergencySchema)

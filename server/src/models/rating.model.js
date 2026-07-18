@@ -1,29 +1,31 @@
  import mongoose, {Schema} from "mongoose";
- import { Timestamp } from "mongodb";
  
  const ratingSchema = new Schema({
     caretakerId: {
         type: Schema.Types.ObjectId,
-        ref: "User"
+        ref: "User",
+        required: true     
      },
     assignmentId: {
         type: Schema.Types.ObjectId,
-        ref: "Assignment"
+        ref: "Assignment",
+        required: true
      },
      averageRating: {
          type: Number,
      },
      ratings: {
          createdBy:{
-            type: String,
-            required: true
+             type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true
          },
          rating: {
            type: Number,
            required: true
          },
          createdAt:{
-            type: timestamp,
+            type: Date,
             required: true
          } 
      }

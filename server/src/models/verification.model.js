@@ -1,10 +1,10 @@
  import mongoose, {Schema} from "mongoose";
- import { timeStamp } from "console";
  
  const verificationSchema = new Schema({
     caretakerId: {
        type: Schema.Types.ObjectId,
-       ref: "User"
+       ref: "User",
+       required: true
      },
     documentType: {
          type: String,

@@ -6,11 +6,11 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 
 const registerUser = asyncHandler( async (req, res) => {
     const { firstName, lastName, address, password, email,
-         phoneNumber, whatsappNumber, aboutMe, role } = req.body;
+         phoneNumber, whatsappNumber, aboutMe, role ,dob, gender } = req.body;
 
     if (
         [firstName, lastName, address, password, email,
-         phoneNumber, whatsappNumber, aboutMe, role ].some((field) =>
+         phoneNumber, whatsappNumber, aboutMe, role, dob, gender ].some((field) =>
         field?.trim() === "")
     ){
         throw new ApiError(400, "All fields are required")
@@ -46,7 +46,9 @@ const registerUser = asyncHandler( async (req, res) => {
         aboutMe: aboutMe || "",
         password,
         role,
-        status: "active"
+        status: "active",
+        dob,
+        gender
     })
 
     const createdUser = await User.findById(user._id).select(

@@ -18,6 +18,7 @@ const userSchema = new Schema({
     address: {
         type: String,
         required: true,
+        trim: true
     },
     avatar: {
         type: String, //cloudinary url
@@ -31,7 +32,7 @@ const userSchema = new Schema({
         trim: true
     },
     phoneNumber: {
-        type: String, //cloudinary url
+        type: String, 
         required: true,
         unique: true
     }, 
@@ -42,6 +43,7 @@ const userSchema = new Schema({
     },
     aboutMe: {
         type: String, 
+        trim: true
     },   
     password:{
         type: String,
@@ -51,7 +53,16 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
-    status: {      // Online, Offline
+    gender: {   //male, female, other
+        type: String,
+        required: true
+    },
+    DOB:{
+        type: String,
+        required: true,
+        trim: true
+    },
+    status: {      // active, banned
         type: String, 
         required: true,
     }, 

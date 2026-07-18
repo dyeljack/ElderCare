@@ -1,10 +1,10 @@
  import mongoose, {Schema} from "mongoose";
- import { Timestamp } from "mongodb";
  
  const healthRecordSchema = new Schema({
     userId: {
             type: Schema.Types.ObjectId,
-            ref: "User"
+            ref: "User",
+            required: true     
      },
     title: {
          type: String,
@@ -13,7 +13,8 @@
      },
      description: {
          type: String,
-         required: true
+         required: true,
+         trim: true
      },
      visibility: {
          type: String,

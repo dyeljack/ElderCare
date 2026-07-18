@@ -1,42 +1,36 @@
- import mongoose, {Schema} from "mongoose";
- import { Timestamp } from "mongodb";
- 
- const caretakerSchema = new Schema({
+import mongoose, { Schema } from "mongoose";
+
+const caretakerSchema = new Schema({
      userId: {
           type: Schema.Types.ObjectId,
-            ref: "User"
+          ref: "User",
+          required: true
      },
-    liveLocation: {
-    latitude: {
-      type: Number,
-      required: true,
-    },
-    longitude: {
-      type: Number,
-      required: true,
-    },
-    accuracy: {
-        type: Number,
-        required: true
-    },
-    updatedAt: {
-        type: Timestamp,
-        required: true
-    }
-    },
-    verified: {
-         type: String,
-         required: true,
+     verified: {
+          type: String,
+          required: true,
      },
-    forHire: {
-         type: Boolean,
-         required: true,
+     forHire: {
+          type: Boolean,
+          required: true,
      },
-     availability: {
-         type: Boolean,
-         required: true
+     language: [
+          {
+               type: String,
+               required: true,
+               trim: true
+          }
+     ],
+     yoe: {
+          type: Number,
+          required: true,
+     },
+     skills: {
+          type: String,
+          required: true,
+          trim: true
      }
- })
- 
- 
- export const Caretaker = mongoose.model("Caretaker", caretakerSchema)
+}, {timestamps: true})
+
+
+export const Caretaker = mongoose.model("CaretakerProfile", caretakerSchema)
