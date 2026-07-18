@@ -1,14 +1,15 @@
  import mongoose, {Schema} from "mongoose";
- import { timeStamp } from "console";
+ import { Timestamp } from "mongodb";
  
  const healthRecordSchema = new Schema({
     userId: {
-         type: String,
-         required: true
+            type: Schema.Types.ObjectId,
+            ref: "User"
      },
     title: {
          type: String,
-         required: true
+         required: true,
+         trim: true
      },
      description: {
          type: String,

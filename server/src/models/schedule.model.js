@@ -1,14 +1,14 @@
  import mongoose, {Schema} from "mongoose";
- import { timeStamp } from "console";
+ import { Timestamp } from "mongodb";
  
  const scheduleSchema = new Schema({
     userId: {
-         type: String,
-         required: true
+           type: Schema.Types.ObjectId,
+            ref: "User"
      },
     medicineId: {
-         type: String,
-         required: true
+         type: Schema.Types.ObjectId,
+            ref: "Medicine"
      },
     time: [{
          type: String,

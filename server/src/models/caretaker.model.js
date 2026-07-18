@@ -1,11 +1,10 @@
  import mongoose, {Schema} from "mongoose";
  import { Timestamp } from "mongodb";
- import { timeStamp } from "console";
  
  const caretakerSchema = new Schema({
      userId: {
-         type: String,
-         required: true,
+          type: Schema.Types.ObjectId,
+            ref: "User"
      },
     liveLocation: {
     latitude: {

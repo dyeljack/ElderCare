@@ -1,10 +1,10 @@
  import mongoose, {Schema} from "mongoose";
- import { timeStamp } from "console";
+ import { Timestamp } from "mongodb";
  
  const emergencySchema = new Schema({
     userId: {
-         type: String,
-         required: true
+          type: Schema.Types.ObjectId,
+            ref: "User"
      },
     liveLocation: {
         latitude: {
@@ -29,11 +29,11 @@
          required: true
      },
     triggeredAt: {
-         type: String,
+         type: timeStamp,
          required: true
      },
     resolvedAt: {
-         type: String,
+         type: timeStamp,
          required: true
      },
  })

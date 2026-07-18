@@ -3,8 +3,8 @@
  
  const verificationSchema = new Schema({
     caretakerId: {
-         type: String,
-         required: true
+       type: Schema.Types.ObjectId,
+       ref: "User"
      },
     documentType: {
          type: String,
@@ -13,7 +13,7 @@
     fileURL: {
          type: String,
          required: true
-     },
+     }, 
      status: {
          type: String,
          required: true

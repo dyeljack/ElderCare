@@ -5,12 +5,12 @@ import { timeStamp } from "console";
 
 const assignmentSchema = new Schema({
     userId: {
-        type: String,
-        required: true,
+        type: Schema.Types.ObjectId,
+        ref: "User"
     },
     caretakerId: {
-        type: String,
-        required: true,
+        type: Schema.Types.ObjectId,
+        ref: "User"
     },
     startDate: {
         type: timeStamp,

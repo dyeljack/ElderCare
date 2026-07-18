@@ -1,14 +1,14 @@
  import mongoose, {Schema} from "mongoose";
- import { timeStamp } from "console";
+ import { Timestamp } from "mongodb";
  
  const ratingSchema = new Schema({
     caretakerId: {
-         type: String,
-         required: true,
+        type: Schema.Types.ObjectId,
+        ref: "User"
      },
     assignmentId: {
-         type: String,
-         required: true,
+        type: Schema.Types.ObjectId,
+        ref: "Assignment"
      },
      averageRating: {
          type: Number,
@@ -23,7 +23,7 @@
            required: true
          },
          createdAt:{
-            type: timeStamp,
+            type: timestamp,
             required: true
          } 
      }

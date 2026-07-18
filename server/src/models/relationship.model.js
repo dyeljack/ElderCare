@@ -1,14 +1,13 @@
  import mongoose, {Schema} from "mongoose";
- import { timeStamp } from "console";
  
  const relationshipSchema = new Schema({
     userId: {
-         type: String,
-         required: true
+           type: Schema.Types.ObjectId,
+           ref: "User"
      },
     guardianId: {
-         type: String,
-         required: true
+      type: Schema.Types.ObjectId,
+      ref: "User"
      },
      status: {
          type: String,

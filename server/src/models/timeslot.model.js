@@ -1,5 +1,5 @@
  import mongoose, {Schema} from "mongoose";
- import { time, timeStamp } from "console";
+ import { time } from "console";
  
  const timeslotSchema = new Schema({
     timeslot:[{
@@ -21,8 +21,8 @@
         required: true
     }], 
     caretakerId: {
-         type: String,
-         required: true
+      type: Schema.Types.ObjectId,
+            ref: "User"
      },
  }, {timestamps: true})
  
