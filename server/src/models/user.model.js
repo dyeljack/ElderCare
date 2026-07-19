@@ -57,7 +57,7 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-    DOB:{
+    dob:{
         type: String,
         required: true,
         trim: true
