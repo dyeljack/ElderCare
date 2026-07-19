@@ -1,27 +1,27 @@
 import mongoose, {Schema} from "mongoose";
-import jwt from "jsonwebtoken";
-import { Timestamp } from "mongodb";
-import { time } from "console";
 
 const appointmentSchema = new Schema({
     userId: {
-        type: String,
-        required: true,
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true
     },
     title: {
         type: String,
         required: true,
+        trim: true
     },
     description: {
         type: String,
         required: true,
+        trim: true
     },
     reminderAt: {
-        type: Timestamp, 
-        required: true,
+        type: Date, 
+        required: true
     },
     time: {
-        type: time,
+        type: Date,
         required: true,
     },
     location: {
@@ -35,12 +35,9 @@ const appointmentSchema = new Schema({
     }
     },
     createdBy: {
-        type: String, 
-        required: true,
-    },   
-    updatedBy:{
-        type: String,
-        required: true
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true
     }
 },{timestamps: true})
 

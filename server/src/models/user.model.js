@@ -18,6 +18,7 @@ const userSchema = new Schema({
     address: {
         type: String,
         required: true,
+        trim: true
     },
     avatar: {
         type: String, //cloudinary url
@@ -31,7 +32,7 @@ const userSchema = new Schema({
         trim: true
     },
     phoneNumber: {
-        type: String, //cloudinary url
+        type: String, 
         required: true,
         unique: true
     }, 
@@ -42,6 +43,7 @@ const userSchema = new Schema({
     },
     aboutMe: {
         type: String, 
+        trim: true
     },   
     password:{
         type: String,
@@ -51,7 +53,16 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
-    status: {      // Online, Offline
+    gender: {   //male, female, other
+        type: String,
+        required: true
+    },
+    DOB:{
+        type: String,
+        required: true,
+        trim: true
+    },
+    status: {      // active, banned
         type: String, 
         required: true,
     }, 
@@ -66,12 +77,12 @@ userSchema.pre("save", async function(){
     this.password = await bcrypt.hash(this.password, 10)
 })
 
-userSchema.method.isPasswordCorrect = async function(password){
+userSchema.methods.isPasswordCorrect = async function(password){
     return await bcrypt.compare(password, this.password);
 }
 
-userSchema.method.generateAccessToken = function(){
-    jwt.sign({
+userSchema.methods.generateAccessToken = function(){
+   return jwt.sign({
         _id: this._id,
         email: this.email,
         username: this.phoneNumber
@@ -81,8 +92,8 @@ process.env.ACCESS_TOKEN_SECRET,
     expiresIn: process.env.ACCESS_TOKEN_EXPIRY
 }
 )}
-userSchema.method.generateRefreshToken = function(){
-    jwt.sign({
+userSchema.methods.generateRefreshToken = function(){
+   return jwt.sign({
         _id: this._id,
     },
 process.env.REFRESH_TOKEN_SECRET,
