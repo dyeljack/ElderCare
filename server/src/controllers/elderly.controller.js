@@ -5,21 +5,16 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 
 const registerElderly = asyncHandler(async (req, res) => {
     const { bloodGroup, allergies, mobilityStatus, cognitiveStatus } = req.body;
-    console.log(req.user._id, req.user.role)
-
-    if(req.user.role != "elderly"){
-        throw new ApiError(400, "you must be an elderly to use this api")
-    }
 
     if (
-        [bloodGroup, allergies, mobilityStatus, cognitiveStatus].some((field) =>
+        [bloodGroup, mobilityStatus, cognitiveStatus].some((field) =>
             field?.trim() === "")
     ) {
         throw new ApiError(400, "All fields are required")
     }
 
 
-    const existedUser = await ElderlyProfile.findOne(req.user._id)
+    const existedUser = await ElderlyProfile.findOne({userId: req.user._id})
 
     if (existedUser) {
         throw new ApiError(409, "User already exists");

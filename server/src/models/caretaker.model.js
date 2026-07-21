@@ -1,13 +1,8 @@
 import mongoose, { Schema } from "mongoose";
 
 const caretakerSchema = new Schema({
-     userId: {
-          type: Schema.Types.ObjectId,
-          ref: "User",
-          required: true
-     },
-     verified: {
-          type: String,
+     verified: { 
+          type: Boolean,
           required: true,
      },
      forHire: {
@@ -23,6 +18,8 @@ const caretakerSchema = new Schema({
      ],
      yoe: {
           type: Number,
+          min: 0,
+          validate: Number.isInteger,
           required: true,
      },
      skills: {
@@ -33,4 +30,4 @@ const caretakerSchema = new Schema({
 }, {timestamps: true})
 
 
-export const Caretaker = mongoose.model("CaretakerProfile", caretakerSchema)
+export const CaretakerProfile = mongoose.model("CaretakerProfile", caretakerSchema)

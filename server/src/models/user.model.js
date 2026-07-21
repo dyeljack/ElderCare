@@ -49,12 +49,14 @@ const userSchema = new Schema({
         type: String,
         required: [true, "password is required"]
     },
-    role:{     // Elderly, guardian, caretaker, admin
+    role:{   
         type: String,
+        enum: ["elder", "guardian", "caretaker"],
         required: true,
     },
-    gender: {   //male, female, other
+    gender: {   
         type: String,
+          enum: ["male", "female", "other"],
         required: true
     },
     dob:{
@@ -62,8 +64,9 @@ const userSchema = new Schema({
         required: true,
         trim: true
     },
-    status: {      // active, banned
+    status: {      
         type: String, 
+        enum: ["active", "banned"],
         required: true,
     }, 
     refreshToken:{
@@ -85,7 +88,7 @@ userSchema.methods.generateAccessToken = function(){
    return jwt.sign({
         _id: this._id,
         email: this.email,
-        username: this.phoneNumber
+        phoneNumber: this.phoneNumber
     },
 process.env.ACCESS_TOKEN_SECRET,
 {

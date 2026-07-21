@@ -17,8 +17,13 @@ app.use(cookieParser())
 
 import userRouter from './routes/user.routes.js'
 import elderlyRouter from './routes/elderly.routes.js'
+import caretakerRouter from './routes/caretaker.routes.js'
+import reminderRouter from './routes/reminder.routes.js'
 
 // routes declaration
 app.use("/api/v1/users", userRouter)
 app.use("/api/v1/elderly", elderlyRouter)
+app.use("/api/v1/caretaker", caretakerRouter)
+app.use("./api/v1/reminder/create", reminderRouter)
+
 export { app }

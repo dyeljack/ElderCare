@@ -9,18 +9,31 @@ const elderlyProfileSchema = new Schema(
     },
     bloodGroup: {
       type: String,
+      enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
       trim: true,
     },
     allergies: {
-      type: String,
+      type: [String],
       trim: true,
     },
     mobilityStatus: {
       type: String,
+      enum: [
+        "independent",
+        "needs assistance",
+        "wheelchair user",
+        "bedridden",
+      ],
       trim: true,
     },
     cognitiveStatus: {
       type: String,
+      enum: [
+          "normal",
+          "mild memory loss",
+          "dementia",
+          "alzheimer's",
+        ],
       trim: true,
     },
   },
