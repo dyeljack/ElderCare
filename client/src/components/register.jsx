@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "./register.css"; // Import the CSS file for styling
+// import "./register.css"; // Import the CSS file for styling  
+// import login from "./login.css"; // Import the CSS file for styling/
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -27,56 +28,60 @@ const Register = () => {
     });
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
 
-  try {
-    const data = new FormData();
+    try {
+      const data = new FormData();
 
-    Object.keys(formData).forEach((key) => {
-      data.append(key, formData[key]);
-    });
+      Object.keys(formData).forEach((key) => {
+        data.append(key, formData[key]);
+      });
 
-    if (avatar) {
-      data.append("avatar", avatar); // field name must match multer
-    }
-
-    const response = await axios.post(
-      "http://localhost:8000/api/v1/users/register",
-      data,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+      if (avatar) {
+        data.append("avatar", avatar); // field name must match multer
       }
-    );
 
-    alert("Registration Successful!");
-    console.log(response.data);
+      const response = await axios.post(
+        "http://localhost:8000/api/v1/users/register",
+        data,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      const navigate = useNavigate();
 
-    setFormData({
-      firstName: "",
-      lastName: "",
-      address: "",
-      password: "",
-      email: "",
-      phoneNumber: "",
-      whatsappNumber: "",
-      aboutMe: "",
-      role: "caretaker",
-      dob: "",
-      gender: "",
-    });
+      alert("Registration Successful!");
+      console.log(response.data);
+      setTimeout(() => {
+        navigate("/login");
+      }, 1000);
 
-    setAvatar(null);
-  } catch (error) {
-    alert(error.response?.data?.message || "Registration Failed");
-    console.error(error);
-  } finally {
-    setLoading(false);
-  }
-};
+      setFormData({
+        firstName: "",
+        lastName: "",
+        address: "",
+        password: "",
+        email: "",
+        phoneNumber: "",
+        whatsappNumber: "",
+        aboutMe: "",
+        role: "caretaker",
+        dob: "",
+        gender: "",
+      });
+
+      setAvatar(null);
+    } catch (error) {
+      alert(error.response?.data?.message || "Registration Failed");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     // <div className="min-h-screen bg-gradient-to-r from-blue-100 to-cyan-100 flex items-center justify-center py-10">
@@ -257,157 +262,160 @@ const handleSubmit = async (e) => {
 
 
     <div className="register-container">
-  <div className="register-card">
+      <div className="register-card">
 
-    <h1 className="register-title">ElderCare</h1>
-    <p className="register-subtitle">Create your account</p>
+        <h1 className="register-title">ElderCare</h1>
+        <p className="register-subtitle">Create your account</p>
 
-    <form className="register-form" onSubmit={handleSubmit}>
+        <form className="register-form" onSubmit={handleSubmit}>
 
-  <div className="form-group">
-    <label>First Name</label>
-    <input
-      type="text"
-      name="firstName"
-      value={formData.firstName}
-      onChange={handleChange}
-      required
-    />
-  </div>
+          <div className="form-group">
+            <label>First Name</label>
+            <input
+              type="text"
+              name="firstName"
+              value={formData.firstName}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-  <div className="form-group">
-    <label>Last Name</label>
-    <input
-      type="text"
-      name="lastName"
-      value={formData.lastName}
-      onChange={handleChange}
-      required
-    />
-  </div>
+          <div className="form-group">
+            <label>Last Name</label>
+            <input
+              type="text"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-  <div className="form-group full-width">
-  <label>Profile Picture</label>
-  <input
-    type="file"
-    accept="image/*"
-    onChange={(e) => setAvatar(e.target.files[0])}
-  />
-</div>
+          <div className="form-group full-width">
+            <label>Profile Picture</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setAvatar(e.target.files[0])}
+            />
+          </div>
 
-  <div className="form-group">
-    <label>Email</label>
-    <input
-      type="email"
-      name="email"
-      value={formData.email}
-      onChange={handleChange}
-      required
-    />
-  </div>
+          <div className="form-group">
+            <label>Email</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-  <div className="form-group">
-    <label>Password</label>
-    <input
-      type="password"
-      name="password"
-      value={formData.password}
-      onChange={handleChange}
-      required
-    />
-  </div>
+          <div className="form-group">
+            <label>Password</label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-  <div className="form-group">
-    <label>Phone Number</label>
-    <input
-      type="text"
-      name="phoneNumber"
-      value={formData.phoneNumber}
-      onChange={handleChange}
-      required
-    />
-  </div>
+          <div className="form-group">
+            <label>Phone Number</label>
+            <input
+              type="text"
+              name="phoneNumber"
+              value={formData.phoneNumber}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-  <div className="form-group">
-    <label>WhatsApp Number</label>
-    <input
-      type="text"
-      name="whatsappNumber"
-      value={formData.whatsappNumber}
-      onChange={handleChange}
-    />
-  </div>
+          <div className="form-group">
+            <label>WhatsApp Number</label>
+            <input
+              type="text"
+              name="whatsappNumber"
+              value={formData.whatsappNumber}
+              onChange={handleChange}
+            />
+          </div>
 
-  <div className="form-group">
-    <label>Date of Birth</label>
-    <input
-      type="date"
-      name="dob"
-      required
-    />
-  </div>
+          <div className="form-group">
+            <label>Date of Birth</label>
+            <input
+              type="date"
+              name="dob"
+              required
+            />
+          </div>
 
-  <div className="form-group">
-    <label>Gender</label>
-    <select
-      name="gender"
-      value={formData.gender}
-      onChange={handleChange}
-      required
-    >
-      <option value="">Select Gender</option>
-      <option value="Male">Male</option>
-      <option value="Female">Female</option>
-      <option value="Other">Other</option>
-    </select>
-  </div>
+          <div className="form-group">
+            <label>Gender</label>
+            <select
+              name="gender"
+              value={formData.gender}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
 
-  <div className="form-group">
-    <label>Role</label>
-    <select
-      name="role"
-      value={formData.role}
-      onChange={handleChange}
-    >
-      <option value="caretaker">Caretaker</option>
-      <option value="elder">Elder</option>
-      <option value="guardian">Guardian</option>
-    </select>
-  </div>
+          <div className="form-group">
+            <label>Role</label>
+            <select
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+            >
+              <option value="caretaker">Caretaker</option>
+              <option value="elder">Elder</option>
+              <option value="guardian">Guardian</option>
+            </select>
+          </div>
 
-  <div className="form-group full-width">
-    <label>Address</label>
-    <textarea
-      rows="3"
-      name="address"
-      value={formData.address}
-      onChange={handleChange}
-      required
-    />
-  </div>
+          <div className="form-group full-width">
+            <label>Address</label>
+            <textarea
+              rows="3"
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-  <div className="form-group full-width">
-    <label>About Me</label>
-    <textarea
-      rows="4"
-      name="aboutMe"
-      value={formData.aboutMe}
-      onChange={handleChange}
-    />
-  </div>
+          <div className="form-group full-width">
+            <label>About Me</label>
+            <textarea
+              rows="4"
+              name="aboutMe"
+              value={formData.aboutMe}
+              onChange={handleChange}
+            />
+          </div>
 
-  <button
-    type="submit"
-    className="submit-btn"
-    disabled={loading}
-  >
-    {loading ? "Registering..." : "Register"}
-  </button>
+          <button
+            type="submit"
+            className="submit-btn"
+            disabled={loading}
+          >
+            {loading ? "Registering..." : "Register"}
+          </button>
+          <p className="text-center mt-6">
+            Already have an account? <a href="./login" className="text-blue-600 font-semibold hover:underline">Login</a>
+          </p>
 
-</form>
+        </form>
 
-  </div>
-</div>
+      </div>
+    </div>
   );
 };
 

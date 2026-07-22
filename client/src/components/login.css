@@ -1,7 +1,6 @@
-@import "tailwindcss";
 * {
   margin: 0;
-  padding: 0;
+  padding: 7px;
   box-sizing: border-box;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -11,7 +10,7 @@ body {
 }
 
 .register-container {
-  min-height: 100vh;
+  min-height: 70vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -124,4 +123,12 @@ textarea {
   .register-title {
     font-size: 30px;
   }
+}
+
+.span.login-link {
+  display: block;
+  text-align: center;
+  margin-top: 20px;
+  font-size: 15px;
+  color: #2563eb;
 }
