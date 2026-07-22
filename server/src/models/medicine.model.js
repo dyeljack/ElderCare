@@ -11,12 +11,12 @@
      },
     description: {
          type: String,
-          trim: true
+         trim: true
      },
     createdBy: {
       type: Schema.Types.ObjectId,
-        ref: "User",
-        required: true
+      ref: "User",
+      required: true
      },
     verified: {
          type: Boolean

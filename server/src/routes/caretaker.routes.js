@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { registerCaretaker } from "../controllers/caretaker.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
-import { authorizeToken } from "../middlewares/authorizeRole.middleware.js";
+import { authorizeRole } from "../middlewares/authorizeRole.middleware.js";
 
 const router = Router()
 
