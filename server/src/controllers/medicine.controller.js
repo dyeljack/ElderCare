@@ -2,33 +2,41 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js"
 import { Medicine } from "../models/medicine.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 const createMedicine = asyncHandler(async (req, res) => {
-    const { name, imageURL, description } = req.body;
+    const { name, description } = req.body;
 
     if (
-        [name, imageURL, description].some((field) =>
+        [name, description].some((field) =>
             field?.trim() === "")
     ) {
         throw new ApiError(400, "All fields are required")
     }
 
+        const imageLocalPath = req.files?.image[0]?.path;
+        let image;
+    
+        if(imageLocalPath){
+    
+           image = await uploadOnCloudinary(imageLocalPath)
+
+           if (!image) {
+            throw new ApiError(400, "Failed to upload image")
+        }
+
+        }
+    
     const medicine = await Medicine.create({
         name,
-        imageURL,
+        image: image?.url,
         description,
         verified: false,
-        createdByUser: req.user._id
+        createdBy: req.user._id
     })
 
-    const createdMedicine = await Medicine.findById(medicine._id)
-
-    if (!createdMedicine) {
-        throw new ApiError(500, "Something went wrong while creating this medicine")
-    }
-
     return res.status(201).json(
-        new ApiResponse(200, createdProfile, "Medicine created successfully")
+        new ApiResponse(200, medicine, "Medicine created successfully")
     )
 
 }

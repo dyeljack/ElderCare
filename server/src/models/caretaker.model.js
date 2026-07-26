@@ -1,7 +1,12 @@
 import mongoose, { Schema } from "mongoose";
 
 const caretakerSchema = new Schema({
-     verified: { 
+     userId: {
+          type: Schema.Types.ObjectId,
+          ref: "User",
+          required: true
+     },
+     verified: {
           type: Boolean,
           required: true,
      },
@@ -27,7 +32,7 @@ const caretakerSchema = new Schema({
           required: true,
           trim: true
      }
-}, {timestamps: true})
+}, { timestamps: true })
 
 
 export const CaretakerProfile = mongoose.model("CaretakerProfile", caretakerSchema)

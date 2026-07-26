@@ -5,7 +5,7 @@ import { Relationship } from "../models/relationship.model.js";
 export const authorizeRelation = () => asyncHandler( async(req, res, next)=>{
 
 
-    if(req.user.role != "elderly"){
+    if(req.user.role != "elderly"){ // if user not the elderly (caretaker/guardian making it for them)
         if(!req.body.elderlyId){
         throw new ApiError(400, "elderlyId is required")
     }
@@ -18,6 +18,9 @@ export const authorizeRelation = () => asyncHandler( async(req, res, next)=>{
      if(!relation){
         throw new ApiError(403, "you are not authorized to perform this action")
      }
+     req.elderlyId = relation.elderlyId
+    }else{ // user is elderly
+        req.elderlyId = req.user._id
     }
     next();
 })

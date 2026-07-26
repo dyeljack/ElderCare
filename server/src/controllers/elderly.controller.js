@@ -14,7 +14,7 @@ const registerElderly = asyncHandler(async (req, res) => {
     }
 
 
-    const existedUser = await ElderlyProfile.findOne({userId: req.user._id})
+    const existedUser = await ElderlyProfile.findOne({ userId: req.user._id })
 
     if (existedUser) {
         throw new ApiError(409, "User already exists");
@@ -28,18 +28,58 @@ const registerElderly = asyncHandler(async (req, res) => {
         cognitiveStatus
     })
 
-    const createdProfile = await ElderlyProfile.findById(elderly._id)
-
-    if (!createdProfile) {
-        throw new ApiError(500, "Something went wrong while registering the profile")
-    }
-
     return res.status(201).json(
-        new ApiResponse(200, createdProfile, "Elderly profile registered successfully")
+        new ApiResponse(200, elderly, "Elderly profile registered successfully")
     )
 
 }
 
 )
 
-export { registerElderly }
+const getElderlyProfile = asyncHandler(async (req, res) => {
+
+    const profile = await ElderlyProfile.findOne({ userId: req.user._id })
+
+    if (!profile) {
+        throw new ApiError(400, "failed to find current user's profile")
+    }
+
+    return res
+        .status(200)
+        .json(200, profile, "current user fetched successfully")
+})
+
+const updateElderlyProfile = asyncHandler(async (req, res) => {
+    const { bloodGroup, allergies, mobilityStatus, cognitiveStatus } = req.body
+
+    if (!(bloodGroup || allergies || mobilityStatus || cognitiveStatus)) {
+        throw new ApiError(400, "Atleast one field is required")
+    }
+
+    const profile = await ElderlyProfile.findOneAndUpdate(
+        { userId: req.user._id },
+        {
+            $set: {
+                bloodGroup,
+                allergies,
+                mobilityStatus,
+                cognitiveStatus
+            }
+        },
+        { new: true }
+    )
+
+    if (!profile) {
+        throw new ApiError(404, "Profile not found");
+    }
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, profile, "Account details updated successfully"))
+})
+
+export {
+    registerElderly,
+    getElderlyProfile,
+    updateElderlyProfile
+}

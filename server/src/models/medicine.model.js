@@ -6,7 +6,7 @@
          required: true,
          trim: true
      },
-    imageURL: {
+    image: {
          type: String
      },
     description: {
