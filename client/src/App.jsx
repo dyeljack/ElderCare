@@ -6,6 +6,8 @@ import './App.css'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Register from "./components/register";
 import Login from "./components/login";
+import Elderly from "./components/Dashboards/ElderDashboard/Elderlydashboard";
+
 
 function App() {
 
@@ -13,9 +15,11 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          {/* <Route path="/" element={<Register />} /> */}
+          <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/elder-dashboard" element={<Elderly />} />
+          
         </Routes>
       </BrowserRouter>
     </>

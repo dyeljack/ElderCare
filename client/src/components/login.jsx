@@ -3,8 +3,10 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import "./login.css"; // Import the CSS file for styling
 // import tailwindcss from "@tailwindcss/vite";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [loginMethod, setLoginMethod] = useState("email");
 
   const [formData, setFormData] = useState({
@@ -39,6 +41,20 @@ const Login = () => {
         "http://localhost:8000/api/v1/users/login", // Replace with your backend URL
         payload
       );
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+
+      const role = response.data.user.role;
+
+      if (role === "elder") {
+        navigate("/elder-dashboard");
+      } else if (role === "caregiver") {
+        navigate("/caregiver-dashboard");
+      } else if (role === "admin") {
+        navigate("/admin-dashboard");
+      } else {
+        alert("Unknown role");
+      }
 
       alert("Login Successful!");
 
@@ -74,11 +90,10 @@ const Login = () => {
           <button
             type="button"
             onClick={() => setLoginMethod("email")}
-            className={`flex-1 py-2 rounded-lg font-semibold transition ${
-              loginMethod === "email"
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200"
-            }`}
+            className={`flex-1 py-2 rounded-lg font-semibold transition ${loginMethod === "email"
+              ? "bg-blue-600 text-white"
+              : "bg-gray-200"
+              }`}
           >
             Email
           </button>
@@ -86,11 +101,10 @@ const Login = () => {
           <button
             type="button"
             onClick={() => setLoginMethod("phone")}
-            className={`flex-1 py-2 rounded-lg font-semibold transition ${
-              loginMethod === "phone"
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200"
-            }`}
+            className={`flex-1 py-2 rounded-lg font-semibold transition ${loginMethod === "phone"
+              ? "bg-blue-600 text-white"
+              : "bg-gray-200"
+              }`}
           >
             Phone
           </button>
@@ -159,14 +173,14 @@ const Login = () => {
         </form>
 
         <p className="text-center mt-6">
-  Don't have an account?{" "}
-  <Link
-    to="/register"
-    className="text-blue-600 font-semibold hover:underline"
-  >
-    Register
-  </Link>
-</p>
+          Don't have an account?{" "}
+          <Link
+            to="/register"
+            className="text-blue-600 font-semibold hover:underline"
+          >
+            Register
+          </Link>
+        </p>
 
       </div>
     </div>
