@@ -51,7 +51,7 @@ const userSchema = new Schema({
     },
     role:{   
         type: String,
-        enum: ["elder", "guardian", "caretaker"],
+        enum: ["elderly", "guardian", "caretaker"],
         required: true,
     },
     gender: {   

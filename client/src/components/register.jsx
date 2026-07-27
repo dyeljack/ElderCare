@@ -34,7 +34,7 @@ const Register = () => {
 
     try {
       const data = new FormData();
-
+      
       Object.keys(formData).forEach((key) => {
         data.append(key, formData[key]);
       });
@@ -52,7 +52,8 @@ const Register = () => {
           },
         }
       );
-      const navigate = useNavigate();
+      console.log(1);
+      // const navigate = useNavigate();
 
       alert("Registration Successful!");
       console.log(response.data);
@@ -375,7 +376,7 @@ const Register = () => {
               onChange={handleChange}
             >
               <option value="caretaker">Caretaker</option>
-              <option value="elder">Elder</option>
+              <option value="elderly">Elder</option>
               <option value="guardian">Guardian</option>
             </select>
           </div>
