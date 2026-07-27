@@ -18,14 +18,11 @@
         accuracy: {
             type: Number,
             required: true
-        },
-        updatedAt: {
-            type: Date,
-            required: true
         }
         },
     status: {
          type: String,
+         enum: ["active", "resolved"],
          required: true
      }
  }, { timestamps: true })

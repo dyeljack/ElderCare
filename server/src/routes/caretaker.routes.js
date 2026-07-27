@@ -7,6 +7,7 @@ import {
 } from "../controllers/caretaker.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { authorizeRole } from "../middlewares/authorizeRole.middleware.js";
+import { createVerification } from "../controllers/verification.controller.js";
 
 const router = Router()
 
@@ -17,6 +18,10 @@ router.route("/get").get(verifyJWT, authorizeRole("caretaker"), getCaretakerProf
 router.route("/update").post(verifyJWT, authorizeRole("caretaker"), updateCaretakerProfile)
 
 router.route("/forHire").post(verifyJWT, authorizeRole("caretaker"), updateForHireStatus)
+
+router.route("/addUser").post(verifyJWT, authorizeRole("caretaker", "guardian"), createRelation)
+
+router.route("/verify").post(verifyJWT, authorizeRole("caretaker"), createVerification)
 
 
 export default router

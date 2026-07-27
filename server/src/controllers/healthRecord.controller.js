@@ -16,13 +16,15 @@ const createHealthRecord = asyncHandler(async (req, res) => {
     }
 
     const fileLocalPath = req.file?.path
+    
 
+    let file
     if (fileLocalPath) {
 
-    const file = await uploadOnCloudinary(fileLocalPath)
+     file = await uploadOnCloudinary(fileLocalPath)
 
     if (!file) {
-        throw new ApiError(400, "Failed to upload file")
+        throw new ApiError(500, "Failed to upload file")
     }
 }
 
@@ -43,5 +45,4 @@ const getHealthRecord = asyncHandler(async(req, res)=>{
     return res
     .status(200)
 })
-
 export {createHealthRecord}

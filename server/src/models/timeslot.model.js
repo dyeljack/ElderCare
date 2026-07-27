@@ -1,6 +1,6 @@
  import mongoose, {Schema} from "mongoose";
  
- const timeslotSchema = new Schema({
+ const timeslotSchema = new Schema({ // available caretaker timeslots
     timeslot:[{
         startTime: {
             type: String,
@@ -9,14 +9,11 @@
         endTime: {
             type: String,
             required: true
-        },
-        available: {
-            type: Boolean,
-            required: true
         }
     }],
     days: [{
         type: String,
+        enum: ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
         required: true
     }], 
     caretakerId: {
