@@ -19,11 +19,15 @@ import userRouter from './routes/user.routes.js'
 import elderlyRouter from './routes/elderly.routes.js'
 import caretakerRouter from './routes/caretaker.routes.js'
 import reminderRouter from './routes/reminder.routes.js'
+import medicineRouter from './routes/medicine.routes.js'
+import appointmentRouter from './routes/appointment.routes.js'
 
 // routes declaration
 app.use("/api/v1/users", userRouter)
 app.use("/api/v1/elderly", elderlyRouter)
 app.use("/api/v1/caretaker", caretakerRouter)
-app.use("./api/v1/reminder/create", reminderRouter)
+app.use("/api/v1/reminder", reminderRouter)
+app.use("/api/v1/medicine", medicineRouter)
+app.use("/api/v1/appointment", appointmentRouter)
 
 export { app }

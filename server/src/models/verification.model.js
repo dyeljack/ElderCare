@@ -10,12 +10,13 @@
          type: String,
          required: true
      },
-    fileURL: {
+    file: {
          type: String,
          required: true
      }, 
      status: {
          type: String,
+         enum: ["pending", "accepted", "rejected"],
          required: true
      },
  }, {timestamps: true})

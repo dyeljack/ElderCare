@@ -16,10 +16,6 @@
          required: true,
          trim: true
      },
-     visibility: {
-         type: String,
-         required: true
-     },
      fileURL: {
          type: String,
      }

@@ -16,23 +16,25 @@ const appointmentSchema = new Schema({
         required: true,
         trim: true
     },
-    reminderAt: {
-        type: Date, 
-        required: true
-    },
     time: {
         type: Date,
         required: true,
     },
+    address:{
+        type: String,
+        required: true
+    },
     location: {
     latitude: {
       type: Number,
-      required: true,
     },
     longitude: {
       type: Number,
-      required: true,
     }
+    },
+    status: {
+        type: String,
+        enum: ["active", "completed"]
     },
     createdBy: {
       type: Schema.Types.ObjectId,

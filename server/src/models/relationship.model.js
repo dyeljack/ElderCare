@@ -30,7 +30,7 @@
     },
     status: {
          type: String,
-         enum: ["active", "pending", "ended"],
+         enum: ["active", "pending", "ended"], // ended is for caretaker tenure
          required: true
      }
  }, {timestamps: true})
