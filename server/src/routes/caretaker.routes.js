@@ -8,6 +8,7 @@ import {
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { authorizeRole } from "../middlewares/authorizeRole.middleware.js";
 import { createVerification } from "../controllers/verification.controller.js";
+import { createRelation } from "../controllers/relationship.controller.js";
 
 const router = Router()
 

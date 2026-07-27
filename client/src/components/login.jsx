@@ -44,7 +44,7 @@ const Login = () => {
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("user", JSON.stringify(response.data.user));
 
-      const role = response.data.user.role;
+      const role = response.data.data.user.role;
 
       if (role === "elder") {
         navigate("/elder-dashboard");
