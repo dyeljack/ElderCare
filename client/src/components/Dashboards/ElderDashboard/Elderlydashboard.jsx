@@ -45,6 +45,7 @@ import {
   AlertCircle,
   X,
 } from "lucide-react";
+import { Sidebar } from "lucide-react";
 
 export default function App() {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -53,71 +54,21 @@ export default function App() {
   const [sosActive, setSosActive] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#faf8ff] text-[#131b2e] font-sans py-0">
+    <div className="min-h-screen bg-[#faf8ff] text-[#131b2e] font-sans py-0 flex">
       {/* 1. Left Sidebar Navigation */}
-      {/* <aside className="hidden lg:flex flex-col fixed left-0 top-0 h-screen w-64 bg-[#faf8ff] border-r border-[#c3c6d7] p-6 z-40">
-        <div className="mb-8">
-          <h1 className="text-3xl font-extrabold text-[#004ac6] tracking-tight">
-            ElderCare Connect
-          </h1>
-          <p className="text-xs font-bold text-[#434655] tracking-widest uppercase mt-1">
-            Compassionate Care
-          </p>
-        </div>
-        <button
-            className="lg:hidden p-1 text-gray-500 hover:text-gray-800"
-            onClick={() => setIsOpenMobile(true)}
-            aria-label="Close menu"
-          >
-            X
-            <X className="w-6 h-6" />
-          </button>
-
-        <nav className="flex-1 space-y-2">
-          {[
-            { id: "dashboard", label: "Dashboard", icon: <LayoutDashboard /> },
-            { id: "health", label: "Health", icon: <HeartPulse /> },
-            { id: "appointments", label: "Appointments", icon: <Calendar /> },
-            { id: "caretakers", label: "Caretakers", icon: <Stethoscope /> },
-            { id: "family", label: "Family", icon: <Users /> },
-            { id: "billing", label: "Billing", icon: <CreditCard /> },
-            { id: "settings", label: "Settings", icon: <Settings /> },
-          ].map((item) => (
-            <button
-              key={item.id}
-              onClick={() => setActiveTab(item.id)}
-              className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-xl font-bold text-lg cursor-pointer transition-all ${
-                activeTab === item.id
-                  ? "bg-[#2563eb] text-white shadow-sm"
-                  : "text-[#434655] hover:bg-[#e2e7ff] hover:text-[#004ac6]"
-              }`}
-            >
-              <span className="w-6 h-6">{item.icon}</span>
-              <span>{item.label}</span>
-            </button>
-          ))}
-        </nav>
-
-        <div className="pt-4 border-t border-[#c3c6d7] space-y-1">
-          <button className="w-full flex items-center gap-4 px-4 py-3 rounded-xl font-bold text-lg text-[#434655] hover:bg-[#e2e7ff]">
-            <HelpCircle className="w-6 h-6" />
-            <span>Help Center</span>
-          </button>
-          <button className="w-full flex items-center gap-4 px-4 py-3 rounded-xl font-bold text-lg text-[#ba1a1a] hover:bg-[#ffdad6]">
-            <LogOut className="w-6 h-6" />
-            <span>Logout</span>
-          </button>
-        </div>
-      </aside> */}
-
+      <Sidebar />
       {/* 2. Main Content Wrapper */}
       <div className="lg:ml-64 min-h-screen flex flex-col">
         {/* Top Header */}
         <header className="sticky top-0 z-30 flex justify-between items-center px-6 py-4 bg-[#faf8ff] border-b border-[#c3c6d7]">
           <div className="flex items-center gap-6">
-            <button className="lg:hidden p-2 text-[#004ac6]">
-              <Menu className="w-8 h-8" />
-            </button>
+            <button
+          onClick={() => setIsOpenMobile(true)}
+          className="lg:hidden p-2 text-[#004ac6] hover:bg-blue-50 rounded-lg"
+          aria-label="Open menu"
+        >
+          <Menu className="w-8 h-8" />
+        </button>
             <div className="hidden md:flex items-center gap-8 font-bold text-sm tracking-widest uppercase">
               <span className="text-[#004ac6] hover:text-[#004ac6] cursor-pointer">
                 <a href="#dashboard">Dashboard</a>
@@ -211,11 +162,10 @@ export default function App() {
                 </div>
                 <button
                   onClick={() => setMedTaken1(!medTaken1)}
-                  className={`w-full md:w-64 h-20 rounded-xl font-bold text-xl flex items-center justify-center gap-2 cursor-pointer ${
-                    medTaken1
+                  className={`w-full md:w-64 h-20 rounded-xl font-bold text-xl flex items-center justify-center gap-2 cursor-pointer ${medTaken1
                       ? "bg-[#6df5e1] text-[#006f64]"
                       : "bg-[#004ac6] text-white hover:bg-[#003ea8]"
-                  }`}
+                    }`}
                 >
                   <Check className="w-9 h-9" />
                   <span>{medTaken1 ? "Taken" : "Mark Taken"}</span>
@@ -243,11 +193,10 @@ export default function App() {
                 </div>
                 <button
                   onClick={() => setMedTaken2(!medTaken2)}
-                  className={`w-full md:w-64 h-20 rounded-xl font-bold text-xl flex items-center justify-center gap-2 cursor-pointer ${
-                    medTaken2
+                  className={`w-full md:w-64 h-20 rounded-xl font-bold text-xl flex items-center justify-center gap-2 cursor-pointer ${medTaken2
                       ? "bg-[#6df5e1] text-[#006f64]"
                       : "bg-[#004ac6] text-white hover:bg-[#003ea8]"
-                  }`}
+                    }`}
                 >
                   <Check className="w-9 h-9" />
                   <span>{medTaken2 ? "Taken" : "Mark Taken"}</span>

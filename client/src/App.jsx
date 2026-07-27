@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Register from "./components/register";
 import Login from "./components/login";
 import Elderly from "./components/Dashboards/ElderDashboard/Elderlydashboard";
+import { Sidebar } from 'lucide-react'
 
 
 function App() {
