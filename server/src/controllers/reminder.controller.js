@@ -56,7 +56,17 @@ const updateReminder = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, reminder, "reminder updated successfully"))
 })
 
+const getUserReminders = asyncHandler(async(req, res) =>{
+
+})
+
+const deleteReminder = asyncHandler(async(req, res) =>{
+    
+})
+
 export {
     createReminder,
-    updateReminder
+    updateReminder,
+    getUserReminders,
+    deleteReminder
 }

@@ -39,11 +39,28 @@ const createRating = asyncHandler(async (req, res) => {
     })
 
     return res.status(201).json(
-        new ApiResponse(200, medicine, "Rating created successfully")
+        new ApiResponse(200, rating, "Rating created successfully")
     )
 
 }
 
 )
 
-export { createRating }
+const updateRating = asyncHandler(async(req, res) =>{
+    
+})
+
+const deleteRating = asyncHandler(async(req, res) =>{
+    
+})
+
+const getAllRatings = asyncHandler(async(req, res) =>{
+    
+})
+
+export { 
+    createRating,
+    updateRating,
+    deleteRating,
+    getAllRatings
+ }

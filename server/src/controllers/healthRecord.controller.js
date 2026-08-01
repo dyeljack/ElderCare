@@ -10,23 +10,23 @@ const createHealthRecord = asyncHandler(async (req, res) => {
 
     if (
         [title, description].some((field) =>
-                field?.trim() === "")
+            field?.trim() === "")
     ) {
         throw new ApiError(400, "All fields are required")
     }
 
     const fileLocalPath = req.file?.path
-    
+
 
     let file
     if (fileLocalPath) {
 
-     file = await uploadOnCloudinary(fileLocalPath)
+        file = await uploadOnCloudinary(fileLocalPath)
 
-    if (!file) {
-        throw new ApiError(500, "Failed to upload file")
+        if (!file) {
+            throw new ApiError(500, "Failed to upload file")
+        }
     }
-}
 
     const healthRecord = await HealthRecord.create({
         userId: req.user._id,
@@ -40,9 +40,25 @@ const createHealthRecord = asyncHandler(async (req, res) => {
     )
 })
 
-const getHealthRecord = asyncHandler(async(req, res)=>{
-    
+const getHealthRecords = asyncHandler(async (req, res) => {
+
     return res
-    .status(200)
+        .status(200)
 })
-export {createHealthRecord}
+
+const updateHealthRecord = asyncHandler(async (req, res) => {
+
+})
+
+const deleteHealthRecord = asyncHandler(async (req, res) => {
+
+})
+
+
+export {
+    createHealthRecord,
+    getHealthRecords,
+    updateHealthRecord,
+    deleteHealthRecord
+
+}

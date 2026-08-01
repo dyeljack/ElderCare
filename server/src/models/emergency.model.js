@@ -6,7 +6,7 @@
           ref: "User",
           required: true
      },
-    liveLocation: {
+    location: {
         latitude: {
           type: Number,
           required: true,
@@ -14,10 +14,6 @@
         longitude: {
           type: Number,
           required: true,
-        },
-        accuracy: {
-            type: Number,
-            required: true
         }
         },
     status: {

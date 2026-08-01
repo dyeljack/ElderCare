@@ -52,23 +52,41 @@ const updateRelation = asyncHandler(async (req, res) => {
         throw new ApiError(400, "isAccepted is false or not provided")
     }
 
-        const relation = await Relationship.findOne({
-            relatedUserId: relatedUserId,
-            elderlyId: req.user_id,
-            status: "pending"
-        })
-        if (!relation) {
-            throw new ApiError(403, "No pending request with this user found")
-        }
+    const relation = await Relationship.findOne({
+        relatedUserId: relatedUserId,
+        elderlyId: req.user_id,
+        status: "pending"
+    })
+    if (!relation) {
+        throw new ApiError(403, "No pending request with this user found")
+    }
 
-        relation.status = "active"
-        relation.save()
+    relation.status = "active"
+    relation.save()
 
-        res
+    res
         .status(200)
         .json(
             new ApiResponse(200, relation, "Request accepted Successfully")
         )
 })
 
-export { createRelation, updateRelation }
+const deleteRelation = asyncHandler(async (req, res) => {
+
+})
+
+const getOutgoingRelations = asyncHandler(async(req, res) =>{
+    
+})
+
+const getIncomingRelations = asyncHandler(async(req, res) =>{
+    
+})
+
+export {
+    createRelation,
+    updateRelation,
+    deleteRelation,
+    getOutgoingRelations,
+    getIncomingRelations
+}

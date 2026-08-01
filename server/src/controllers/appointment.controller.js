@@ -63,7 +63,22 @@ const updateAppointment = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, appointment, "Appointment updated successfully"))
 })
 
+const deleteAppointment = asyncHandler(async(req,res) =>{
+
+})
+
+const getUserAppointments = asyncHandler(async(req, res)=>{
+
+})
+
+const getAppointmentHistory = asyncHandler(async(req, res)=>{
+
+})
+
 export {
     createAppointment,
-    updateAppointment
+    updateAppointment,
+    deleteAppointment,
+    getUserAppointments,
+    getAppointmentHistory
 }

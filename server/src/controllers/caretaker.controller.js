@@ -100,9 +100,15 @@ const updateForHireStatus = asyncHandler(async (req, res)=>{
     .json(new ApiResponse(200, {}, "forHire status updated successfully" ))
 })
 
+const getAllCaretakersForHire = asyncHandler(async(req, res)=>{
+
+})
+
 export {
     registerCaretaker,
     getCaretakerProfile,
     updateCaretakerProfile,
-    updateForHireStatus
+    updateForHireStatus,
+    getAllCaretakersForHire
+
 }

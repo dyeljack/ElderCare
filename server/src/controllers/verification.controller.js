@@ -38,4 +38,21 @@ const createVerification = asyncHandler(async (req, res) => {
     )
 }) 
 
-export {createVerification}
+const verifyCaretaker = asyncHandler(async(req, res) =>{
+    
+})
+
+const deleteVerification = asyncHandler(async(req, res) =>{
+    
+})
+
+const getUnverifiedCaretakers = asyncHandler(async(req, res) =>{
+    
+})
+
+export {
+    createVerification,
+    verifyCaretaker,
+    deleteVerification,
+    getUnverifiedCaretakers
+}

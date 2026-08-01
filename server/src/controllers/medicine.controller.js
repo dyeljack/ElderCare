@@ -43,4 +43,26 @@ const createMedicine = asyncHandler(async (req, res) => {
 
 )
 
-export { createMedicine }
+const updateMedicine = asyncHandler(async(req, res) =>{
+
+})
+
+const getMedicineById = asyncHandler(async(req, res) =>{
+    
+})
+
+const getAllMedicines = asyncHandler(async(req, res) =>{
+    
+})
+
+const deleteMedicine = asyncHandler(async(req, res) =>{
+    
+})
+
+export { 
+    createMedicine,
+    updateMedicine,
+    getMedicineById,
+    getAllMedicines,
+    deleteMedicine
+ }
