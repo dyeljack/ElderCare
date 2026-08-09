@@ -16,7 +16,7 @@
          required: true,
          trim: true
      },
-     fileURL: {
+     file: {
          type: String,
      }
  }, {timestamps: true})

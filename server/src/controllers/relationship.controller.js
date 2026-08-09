@@ -36,33 +36,33 @@ const createRelation = asyncHandler(async (req, res) => {
     })
 
     return res.status(201).json(
-        new ApiResponse(200, relation, "Request sent successfully")
+        new ApiResponse(201, relation, "Request sent successfully")
     )
 
 })
 
-const updateRelation = asyncHandler(async (req, res) => {
-    const { isAccepted, relatedUserId } = req.body
+const AcceptRequest = asyncHandler(async (req, res) => {
+    const { relatedUserId } = req.body
 
     if (relatedUserId.trim() === "") {
         throw new ApiError(400, "related user Id not provided")
     }
 
-    if (!isAccepted) {
-        throw new ApiError(400, "isAccepted is false or not provided")
-    }
-
-    const relation = await Relationship.findOne({
-        relatedUserId: relatedUserId,
-        elderlyId: req.user_id,
-        status: "pending"
-    })
-    if (!relation) {
-        throw new ApiError(403, "No pending request with this user found")
-    }
-
-    relation.status = "active"
-    relation.save()
+    const relation = await Relationship.findOneAndUpdate(
+        {
+            relatedUserId: relatedUserId,
+            elderlyId: req.user_id,
+            status: "pending"
+        },
+        {
+            $set:{
+                status: "active"
+            }
+        },
+        {
+            new:true
+        }
+    )
 
     res
         .status(200)
@@ -73,20 +73,86 @@ const updateRelation = asyncHandler(async (req, res) => {
 
 const deleteRelation = asyncHandler(async (req, res) => {
 
+    const { relationId } = req.params
+
+    const userId = req.user.role === "elderly"
+        ? "elderlyId"
+        : "relatedUserId";
+
+
+    const relation = await Relationship.findOneAndDelete({
+        [userId]: req.user._id,
+        status: { $in: ["active", "pending"] }
+    })
+
+    res
+        .status(200)
+        .json(
+            new ApiResponse(200, relation, "relation deleted Successfully")
+        )
 })
 
-const getOutgoingRelations = asyncHandler(async(req, res) =>{
-    
+const getPendingRequest = asyncHandler(async (req, res) => {
+
+    const userId = req.user.role === "elderly"
+        ? "elderlyId"
+        : "relatedUserId";
+
+    const relation = await Relationship.find({
+        [userId]: req.user._id,
+        status: "pending"
+    })
+
+    if (!relation) {
+        throw new ApiError(404, "no pending requests found")
+    }
+
+    res
+        .status(200)
+        .json(
+            new ApiResponse(200, relation, "pending requests fetched successfully")
+        )
+
 })
 
-const getIncomingRelations = asyncHandler(async(req, res) =>{
-    
+const getRelatedUser = asyncHandler(async (req, res) => {
+
+    const userId = req.user.role === "elderly"
+        ? "elderlyId"
+        : "relatedUserId";
+
+    const relation = await Relationship.find({
+        [userId]: req.user._id,
+        status: "active"
+    });
+
+    if (!relation) {
+        throw new ApiError(404, "no related users found")
+    }
+
+    const field = req.user.role === "elderly"
+        ? "relatedUserId"
+        : "elderlyId";
+
+    const userIds = relation.map(item => item[field]);
+
+    const relatedUsers = await User.find({
+        _id: { $in: userIds }
+    }).select("firstName lastName avatar")
+
+    res
+        .status(200)
+        .json(
+            new ApiResponse(200, relatedUsers, "related elders fetched successfully")
+        )
+
 })
 
 export {
     createRelation,
     updateRelation,
     deleteRelation,
-    getOutgoingRelations,
-    getIncomingRelations
+    getOutgoingRequest,
+    getIncomingRequest,
+    getRelatedUser
 }

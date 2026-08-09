@@ -3,6 +3,8 @@ import { ApiError } from "../utils/ApiError.js"
 import { User } from "../models/user.model.js"
 import { uploadOnCloudinary } from "../utils/cloudinary.js"
 import { ApiResponse } from "../utils/ApiResponse.js";
+import { CaretakerProfile } from "../models/caretaker.model.js";
+import { ElderlyProfile } from "../models/elderly.model.js";
 
 const generateAccessAndRefreshTokens = async (userId) => {
     try {
@@ -77,7 +79,7 @@ const registerUser = asyncHandler(async (req, res) => {
     }
 
     return res.status(201).json(
-        new ApiResponse(200, createdUser, "User registered successfully")
+        new ApiResponse(201, createdUser, "User registered successfully")
     )
 
 })
@@ -209,13 +211,39 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
 })
 
 const getCurrentUser = asyncHandler(async (req, res) => {
+
+    if(req.user.role === "caretaker"){
+        req.user.profile = await CaretakerProfile.findOne({userId: req.user._id})
+    }else if(req.user.role === "elderly"){
+        req.user.profile = await ElderlyProfile.findOne({userId: req.user._id})
+    }
+
     return res
         .status(200)
         .json(200, req.user, "current user fetched successfully")
 })
 
 const getUserById = asyncHandler(async(req, res) =>{
+
+    const { userId } = req.params 
     
+    let user = await User.findById(userId).select("-password -refreshToken")
+
+    if(!user){
+        throw new ApiError(404, "user not found")
+    }  
+
+    if(user.role === "caretaker"){
+        user.profile = await CaretakerProfile.findOne({userId: userId})
+    }else if(user.role === "elderly"){
+        user.profile = await ElderlyProfile.findOne({userId: userId})
+    }
+
+    res
+    .status(200)
+    .json(
+        new ApiResponse(200, user, "user profile fetched successfully")
+    )
 })
 
 const updateAccountDetails = asyncHandler(async (req, res) => {

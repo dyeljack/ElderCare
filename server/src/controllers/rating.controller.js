@@ -39,7 +39,7 @@ const createRating = asyncHandler(async (req, res) => {
     })
 
     return res.status(201).json(
-        new ApiResponse(200, rating, "Rating created successfully")
+        new ApiResponse(201, rating, "Rating created successfully")
     )
 
 }
@@ -47,14 +47,51 @@ const createRating = asyncHandler(async (req, res) => {
 )
 
 const updateRating = asyncHandler(async(req, res) =>{
+
+    const {ratingId} = req.params
+    const {rating, review } = req.body
+
+       if (!(rating?.trim() || review?.trim())) {
+            throw new ApiError(400, "atleast 1 field is required")
+        }
+
+    const rating = await Rating.findOneAndUpdate(
+        {_id: ratingId},
+        {
+            $set:{
+                rating,
+                review
+            }
+        },
+        {new: true}
+    )
     
+      return res.status(200).json(
+        new ApiResponse(200, rating, "Rating updated successfully")
+    )
 })
 
 const deleteRating = asyncHandler(async(req, res) =>{
-    
+
+    const {ratingId} = req.params
+
+    const rating = await Rating.findByIdAndDelete(ratingId)
+
+       return res.status(200).json(
+        new ApiResponse(200, rating, `Rating \"${rating.review}\" deleted successfully`)
+    )
 })
 
-const getAllRatings = asyncHandler(async(req, res) =>{
+const getAllCaretakerRatings = asyncHandler(async(req, res) =>{
+
+    const {caretakerId} = req.params 
+
+    const rating = await Rating.find({caretakerId})
+
+         return res.status(200).json(
+        new ApiResponse(200, rating, "Ratings fetched successfully")
+    )
+    
     
 })
 
@@ -62,5 +99,5 @@ export {
     createRating,
     updateRating,
     deleteRating,
-    getAllRatings
+    getCaretakerAllRatings
  }

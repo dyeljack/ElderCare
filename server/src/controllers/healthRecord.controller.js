@@ -36,22 +36,77 @@ const createHealthRecord = asyncHandler(async (req, res) => {
     })
 
     return res.status(201).json(
-        new ApiResponse(200, createdUser, "Health Record Created successfully")
+        new ApiResponse(201, createdUser, "Health Record Created successfully")
     )
 })
 
 const getHealthRecords = asyncHandler(async (req, res) => {
 
+    const record = await HealthRecord.find({userId: req.user.id})
+
     return res
         .status(200)
+        .json(
+            new ApiResponse(200, record, "health records fetched successfully")
+        )
 })
 
 const updateHealthRecord = asyncHandler(async (req, res) => {
+    const { healthRecordId } = req.params
+    const { title, description } = req.body
+
+    const fileLocalPath = req.file?.path
+
+    if (!(title?.trim() || description?.trim() || fileLocalPath)) {
+        throw new ApiError(400, "atleast 1 field is required")
+    }
+
+    const healthRecord = await HealthRecord.findOne({
+        _id: healthRecordId,
+        userId: req.user._id
+    })
+
+    if (!healthRecord) {
+        new ApiError(400, "Health Record not found")
+    }
+
+    let file
+    if (fileLocalPath) {
+        file = await uploadOnCloudinary(fileLocalPath)
+        if (!file) {
+            new ApiError(500, "failed to upload file")
+        }
+        await deleteFromCloudinary(HealthRecord.file)
+    }
+
+    if (title) healthRecord.title = title
+    if (description) healthRecord.description = description
+    if (file) healthRecord.file = file.url
+    await healthRecord.save()
+
+    res
+        .status(200)
+        .json(
+            new ApiResponse(200, healthRecord, "Health Record updated successfully")
+        )
+
 
 })
 
 const deleteHealthRecord = asyncHandler(async (req, res) => {
 
+      const { healthRecordId } = req.params
+
+      const healthRecord = await HealthRecord.findOneAndDelete({
+         _id: healthRecordId,
+        userId: req.user._id
+      })
+
+      res
+      .status(200)
+      .json(
+        new ApiResponse(200, `Health Record ${healthRecord.title} got deleted successfully`)
+      )
 })
 
 
@@ -60,5 +115,4 @@ export {
     getHealthRecords,
     updateHealthRecord,
     deleteHealthRecord
-
 }

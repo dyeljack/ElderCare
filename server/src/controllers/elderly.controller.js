@@ -29,25 +29,12 @@ const registerElderly = asyncHandler(async (req, res) => {
     })
 
     return res.status(201).json(
-        new ApiResponse(200, elderly, "Elderly profile registered successfully")
+        new ApiResponse(201, elderly, "Elderly profile registered successfully")
     )
 
 }
 
 )
-
-const getElderlyProfile = asyncHandler(async (req, res) => {
-
-    const profile = await ElderlyProfile.findOne({ userId: req.user._id })
-
-    if (!profile) {
-        throw new ApiError(400, "failed to find current user's profile")
-    }
-
-    return res
-        .status(200)
-        .json(200, profile, "current user fetched successfully")
-})
 
 const updateElderlyProfile = asyncHandler(async (req, res) => {
     const { bloodGroup, allergies, mobilityStatus, cognitiveStatus } = req.body
@@ -76,10 +63,6 @@ const updateElderlyProfile = asyncHandler(async (req, res) => {
     return res
         .status(200)
         .json(new ApiResponse(200, profile, "Account details updated successfully"))
-})
-
-const getRelatedElders = asyncHandler(async(req, res)=>{
-    
 })
 
 export {

@@ -2,6 +2,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js"
 import { CaretakerProfile } from "../models/caretaker.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
+import { refreshAccessToken } from "./user.controller.js";
 
 const registerCaretaker = asyncHandler(async (req, res) => {
     const { language, yoe, skills } = req.body;
@@ -28,24 +29,9 @@ const registerCaretaker = asyncHandler(async (req, res) => {
     })
 
     return res.status(201).json(
-        new ApiResponse(200, caretaker, "Caretaker profile registered successfully")
+        new ApiResponse(201, caretaker, "Caretaker profile registered successfully")
     )
 
-})
-
-const getCaretakerProfile = asyncHandler(async (req, res) => {
-
-    const profile = await CaretakerProfile.findOne({ userId: req.user._id })
-
-    if (!profile) {
-        throw new ApiError(400, "failed to find current user's profile")
-    }
-
-    return res
-        .status(200)
-        .json(
-           new ApiResponse(200, profile, "current user fetched successfully")
-        )
 })
 
 const updateCaretakerProfile = asyncHandler(async (req, res) => {
@@ -76,12 +62,8 @@ const updateCaretakerProfile = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, profile, "Account details updated successfully"))
 })
 
-const updateForHireStatus = asyncHandler(async (req, res)=>{
+const toggleForHireStatus = asyncHandler(async (req, res)=>{
     
-    if (typeof req.body.forHire !== "boolean") {
-  throw new ApiError(400, "forHire must be a boolean");
-}
-
     const profile = await CaretakerProfile.findOne({userId: req.user._id})
 
        if (!profile) {
@@ -92,16 +74,62 @@ const updateForHireStatus = asyncHandler(async (req, res)=>{
         throw new ApiError(403, "you must be verified in order to change for-Hire status")
     }
 
-    profile.forHire = req.body.forHire
+    profile.forHire = !profile.forHire
     await profile.save({ validateBeforeSave: false }) 
 
     return res
     .status(200)
-    .json(new ApiResponse(200, {}, "forHire status updated successfully" ))
+    .json(new ApiResponse(200, profile, "forHire status updated successfully" ))
 })
 
 const getAllCaretakersForHire = asyncHandler(async(req, res)=>{
 
+    const caretaker = await CaretakerProfile.aggregate([
+        {
+            $match: {
+            forHire: true
+        }}
+        ,
+        {
+            $lookup:{
+                from: "users",
+                localField: "userId",
+                foreignField: "_id",
+                as: "user",
+                pipeline: [
+                    {
+                        project:{
+                            status: 0,
+                            refreshToken: 0,
+                            role: 0,
+                            password: 0,
+                            createdAt: 0,
+                            updatedAt: 0
+                        }
+                }
+                ]
+            }
+        },
+        {
+            project:{
+                language: 1,
+                yoe: 1,
+                skills: 1,
+                createdAt: 1,
+                updatedAt: 1
+            }
+        }
+    ])
+
+    if(!caretaker){
+        throw new ApiError(404, "no caretakers for Hire found")
+    }
+
+    res
+    .status(200)
+    .json(
+        new ApiResponse(200,caretaker, "caretakers for hire fetched successfully")
+    )
 })
 
 export {
@@ -110,5 +138,4 @@ export {
     updateCaretakerProfile,
     updateForHireStatus,
     getAllCaretakersForHire
-
 }

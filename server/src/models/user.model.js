@@ -51,7 +51,7 @@ const userSchema = new Schema({
     },
     role:{   
         type: String,
-        enum: ["elderly", "guardian", "caretaker"],
+        enum: ["elderly", "guardian", "caretaker", "admin"],
         required: true,
     },
     gender: {   
@@ -63,11 +63,6 @@ const userSchema = new Schema({
         type: String,
         required: true,
         trim: true
-    },
-    status: {      
-        type: String, 
-        enum: ["active", "banned"],
-        required: true,
     }, 
     refreshToken:{
         type: String

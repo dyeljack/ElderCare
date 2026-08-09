@@ -36,27 +36,58 @@ const createMedicine = asyncHandler(async (req, res) => {
     })
 
     return res.status(201).json(
-        new ApiResponse(200, medicine, "Medicine created successfully")
+        new ApiResponse(201, medicine, "Medicine created successfully")
     )
 
 }
 
 )
 
-const updateMedicine = asyncHandler(async(req, res) =>{
-
-})
-
 const getMedicineById = asyncHandler(async(req, res) =>{
+
+    const { medicineId } = req.params
+
+    const medicine = await Medicine.findById(medicineId)
+
+    res
+    .status(200)
+    .json(
+        new ApiResponse(200, medicine, "medicine fetched successfully")
+    )
     
 })
 
 const getAllMedicines = asyncHandler(async(req, res) =>{
+
+    const medicine = await Medicine.find({})
+
+    res
+    .status(200)
+    .json(
+        new ApiResponse(200, medicine, "all medicines fetched successfully")
+    )
     
 })
 
 const deleteMedicine = asyncHandler(async(req, res) =>{
-    
+
+    const { medicineId } = req.params
+
+    const medicine = await Medicine.findById(medicineId)
+
+    if(medicine.createdBy !== req.user._id && req.user.role !== "admin"){
+        throw new ApiError(403, "you are not authorized to delete this medicine")
+    }
+
+    await medicine.deleteOne()
+
+    res
+    .status(200)
+    .json(
+        new ApiResponse(200, `medicine ${medicine.name} deleted successfully`)
+    )
+
+  
 })
 
 export { 

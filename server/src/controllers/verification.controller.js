@@ -34,7 +34,7 @@ const createVerification = asyncHandler(async (req, res) => {
     })
 
     return res.status(201).json(
-        new ApiResponse(200, verification, "Verification request created successfully")
+        new ApiResponse(201, verification, "Verification request created successfully")
     )
 }) 
 

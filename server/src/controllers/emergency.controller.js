@@ -20,7 +20,7 @@ const createEmergency = asyncHandler(async (req, res) => {
     })
 
     return res.status(201).json(
-        new ApiResponse(200, emergency, "Emergency Created successfully")
+        new ApiResponse(201, emergency, "Emergency Created successfully")
     )
 
 })

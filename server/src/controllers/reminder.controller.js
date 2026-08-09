@@ -24,7 +24,7 @@ const createReminder = asyncHandler(async (req, res) => {
     })
 
     return res.status(201).json(
-        new ApiResponse(200, createdProfile, "Reminder Created successfully")
+        new ApiResponse(201, createdProfile, "Reminder Created successfully")
     )
 
 })

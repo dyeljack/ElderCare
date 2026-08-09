@@ -28,7 +28,7 @@ const createAppointment = asyncHandler(async (req, res) => {
     })
 
     return res.status(201).json(
-        new ApiResponse(200, appointment, "Appointment Created successfully")
+        new ApiResponse(201, appointment, "Appointment Created successfully")
     )
 
 })
@@ -41,7 +41,9 @@ const updateAppointment = asyncHandler(async (req, res) => {
     }
 
     const appointment = await Appointment.findOneAndUpdate(
-        { userId: req.elderlyId },
+        { userId: req.elderlyId,
+            status: "active"
+         },
         {
             $set: {
                 title,
@@ -65,13 +67,45 @@ const updateAppointment = asyncHandler(async (req, res) => {
 
 const deleteAppointment = asyncHandler(async(req,res) =>{
 
+    const appointment = await Appointment.findOneAndDelete({
+        userId: req.elderlyId,
+        status: "active"
+    })
+
+    res
+    .status(200)
+    .json(
+        new ApiResponse(200, `appointment ${appointment.title} deleted successfully`)
+    )
 })
 
 const getUserAppointments = asyncHandler(async(req, res)=>{
 
+    const appointment = await Appointment.find({
+        userId: req.elderlyId,
+        status: "active"     
+    })
+
+     res
+    .status(200)
+    .json(
+        new ApiResponse(200, appointment, "appointment fetched successfully")
+    )
+
 })
 
 const getAppointmentHistory = asyncHandler(async(req, res)=>{
+
+    const appointment = await Appointment.find({
+        userId: req.elderlyId,
+        status: "completed"     
+    })
+
+     res
+    .status(200)
+    .json(
+        new ApiResponse(200, appointment, "appointment history fetched successfully")
+    )
 
 })
 
