@@ -58,15 +58,32 @@ const updateReminder = asyncHandler(async (req, res) => {
 
 const getUserReminders = asyncHandler(async(req, res) =>{
 
+    const reminder = await Reminder.find({userId: req.elderlyId})
+
+      return res
+        .status(200)
+        .json(new ApiResponse(200, reminder, "reminders fetched successfully"))
 })
 
 const deleteReminder = asyncHandler(async(req, res) =>{
-    
+
+    const {reminderId} = req.params
+
+    const reminder = await Reminder.findByIdAndDelete(reminderId)
+
+      return res
+        .status(200)
+        .json(new ApiResponse(200, reminder, "reminder deleted successfully"))
+})
+
+const getReminderHistory = asyncHandler(async(req, res) =>{
+
 })
 
 export {
     createReminder,
     updateReminder,
     getUserReminders,
-    deleteReminder
+    deleteReminder,
+    getReminderHistory
 }

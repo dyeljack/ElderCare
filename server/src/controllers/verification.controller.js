@@ -3,6 +3,7 @@ import { ApiError } from "../utils/ApiError.js"
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { Verification } from "../models/verification.model.js";
+import { CaretakerProfile } from "../models/caretaker.model.js";
 
 
 const createVerification = asyncHandler(async (req, res) => {
@@ -29,8 +30,7 @@ const createVerification = asyncHandler(async (req, res) => {
     const verification = await Verification.create({
         caretakerId: req.user._id,
         documentType,
-        file: file.url,
-        status: "pending",
+        file: file.url
     })
 
     return res.status(201).json(
@@ -39,20 +39,74 @@ const createVerification = asyncHandler(async (req, res) => {
 }) 
 
 const verifyCaretaker = asyncHandler(async(req, res) =>{
-    
-})
 
-const deleteVerification = asyncHandler(async(req, res) =>{
+    const {caretakerId} = req.params
+
+       await CaretakerProfile.findOneAndUpdate(
+        {
+            _id: caretakerId
+        },
+        {
+            $set:{
+                verified: true
+            }
+        },
+        {
+            new: true
+        }
+    )
+
+    await Verification.findOneAndDelete({caretakerId})
     
+     return res.status(201).json(
+        new ApiResponse(201, "Caretaker Verified successfully")
+    )
 })
 
 const getUnverifiedCaretakers = asyncHandler(async(req, res) =>{
-    
+
+   const verification = await Verification.aggregate([
+        {
+            $lookup:{
+                from: "users",
+                localField: "caretakerId",
+                foreignField: "_id",
+                as: "users",
+                pipeline:[
+                           {
+                        project:{
+                            refreshToken: 0,
+                            role: 0,
+                            password: 0,
+                        }
+                }
+                ]
+            }
+        },
+        {
+            $lookup:{
+                from: "caretakerprofiles",
+                localField: "caretakerId",
+                foreignField: "userId",
+                as: "profile"
+            }
+        }
+    ])
+
+    if(!verification){
+        throw new ApiError(404, "caretakers for verifications not found")
+    }
+
+    res
+    .status(200)
+    .json(
+        new ApiResponse(200, verification, "caretakers for verification fetched successfully")
+    )
+
 })
 
 export {
     createVerification,
     verifyCaretaker,
-    deleteVerification,
     getUnverifiedCaretakers
 }

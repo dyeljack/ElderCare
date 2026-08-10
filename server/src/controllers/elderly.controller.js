@@ -65,8 +65,8 @@ const updateElderlyProfile = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, profile, "Account details updated successfully"))
 })
 
+
 export {
     registerElderly,
-    getElderlyProfile,
     updateElderlyProfile
 }

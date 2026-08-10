@@ -92,7 +92,6 @@ const deleteMedicine = asyncHandler(async(req, res) =>{
 
 export { 
     createMedicine,
-    updateMedicine,
     getMedicineById,
     getAllMedicines,
     deleteMedicine

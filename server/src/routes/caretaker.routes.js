@@ -1,28 +1,27 @@
 import { Router } from "express";
 import {
-    getCaretakerProfile,
     registerCaretaker,
     updateCaretakerProfile,
-    updateForHireStatus
+    toggleForHireStatus
 } from "../controllers/caretaker.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { authorizeRole } from "../middlewares/authorizeRole.middleware.js";
 import { createVerification } from "../controllers/verification.controller.js";
-import { createRelation } from "../controllers/relationship.controller.js";
+import { sendRequest } from "../controllers/relationship.controller.js";
 
 const router = Router()
 
-router.route("/register").post(verifyJWT, authorizeRole("caretaker"), registerCaretaker)
+router.use(verifyJWT)
 
-router.route("/get").get(verifyJWT, authorizeRole("caretaker"), getCaretakerProfile)
+router.route("/")
+.post(authorizeRole("caretaker"), registerCaretaker)
+.patch(authorizeRole("caretaker"), updateCaretakerProfile)
 
-router.route("/update").post(verifyJWT, authorizeRole("caretaker"), updateCaretakerProfile)
+router.route("/forHire").patch(authorizeRole("caretaker"), toggleForHireStatus)
 
-router.route("/forHire").post(verifyJWT, authorizeRole("caretaker"), updateForHireStatus)
+router.route("/addUser/:elderlyNumber").post(authorizeRole("caretaker", "guardian"), sendRequest)
 
-router.route("/addUser").post(verifyJWT, authorizeRole("caretaker", "guardian"), createRelation)
-
-router.route("/verify").post(verifyJWT, authorizeRole("caretaker"), createVerification)
+router.route("/verify").post(authorizeRole("caretaker"), createVerification)
 
 
 export default router

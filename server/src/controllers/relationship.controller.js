@@ -4,8 +4,10 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { User } from "../models/user.model.js";
 import { Relationship } from "../models/relationship.model.js";
 
-const createRelation = asyncHandler(async (req, res) => {
-    const { elderlyNumber, startDate, endDate } = req.body;
+const sendRequest = asyncHandler(async (req, res) => {
+
+    const { elderlyNumber } = req.params
+    const { startDate, endDate } = req.body;
 
     if (elderlyNumber.trim() === "") {
         throw new ApiError(400, "Elderly Phone Number is required")
@@ -41,17 +43,17 @@ const createRelation = asyncHandler(async (req, res) => {
 
 })
 
-const AcceptRequest = asyncHandler(async (req, res) => {
-    const { relatedUserId } = req.body
+const acceptRequest = asyncHandler(async (req, res) => {
 
-    if (relatedUserId.trim() === "") {
-        throw new ApiError(400, "related user Id not provided")
+    const { relationId } = req.params
+
+    if (relationId.trim() === "") {
+        throw new ApiError(400, "relation Id not provided")
     }
 
     const relation = await Relationship.findOneAndUpdate(
         {
-            relatedUserId: relatedUserId,
-            elderlyId: req.user_id,
+            _id: relationId,
             status: "pending"
         },
         {
@@ -149,10 +151,9 @@ const getRelatedUser = asyncHandler(async (req, res) => {
 })
 
 export {
-    createRelation,
-    updateRelation,
+    sendRequest,
     deleteRelation,
-    getOutgoingRequest,
-    getIncomingRequest,
+    acceptRequest,
+    getPendingRequest,
     getRelatedUser
 }

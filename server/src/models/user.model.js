@@ -60,9 +60,8 @@ const userSchema = new Schema({
         required: true
     },
     dob:{
-        type: String,
-        required: true,
-        trim: true
+        type: Date,
+        required: true
     }, 
     refreshToken:{
         type: String

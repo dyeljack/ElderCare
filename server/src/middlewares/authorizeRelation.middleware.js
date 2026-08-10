@@ -6,13 +6,13 @@ export const authorizeRelation = () => asyncHandler( async(req, res, next)=>{
 
 
     if(req.user.role != "elderly"){ // if user not the elderly (caretaker/guardian making it for them)
-        if(!req.body.elderlyId){
+        if(!req.params.elderlyId){
         throw new ApiError(400, "elderlyId is required")
     }
 
     const relation = await Relationship.findOne({
         relatedUserId: req.user._id,
-        elderlyId: req.body.elderlyId,
+        elderlyId: req.params.elderlyId,
         status: "active"
     })
      if(!relation){

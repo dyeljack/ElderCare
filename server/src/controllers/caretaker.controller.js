@@ -134,8 +134,7 @@ const getAllCaretakersForHire = asyncHandler(async(req, res)=>{
 
 export {
     registerCaretaker,
-    getCaretakerProfile,
     updateCaretakerProfile,
-    updateForHireStatus,
+    toggleForHireStatus,
     getAllCaretakersForHire
 }
