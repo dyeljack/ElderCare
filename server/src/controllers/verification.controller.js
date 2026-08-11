@@ -74,7 +74,7 @@ const getUnverifiedCaretakers = asyncHandler(async(req, res) =>{
                 as: "users",
                 pipeline:[
                            {
-                        project:{
+                        $project:{
                             refreshToken: 0,
                             role: 0,
                             password: 0,

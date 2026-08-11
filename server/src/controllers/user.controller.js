@@ -1,7 +1,7 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js"
 import { User } from "../models/user.model.js"
-import { uploadOnCloudinary } from "../utils/cloudinary.js"
+import { uploadOnCloudinary, deleteFromCloudinary } from "../utils/cloudinary.js"
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { CaretakerProfile } from "../models/caretaker.model.js";
 import { ElderlyProfile } from "../models/elderly.model.js";
@@ -33,6 +33,10 @@ const registerUser = asyncHandler(async (req, res) => {
                 field?.trim() === "")
     ) {
         throw new ApiError(400, "All fields are required")
+    }
+
+    if(role === "admin"){
+        throw new ApiError(403, "you can't register as admin")
     }
 
     const existedUser = await User.findOne({
@@ -196,7 +200,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 const changeCurrentPassword = asyncHandler(async (req, res) => {
     const { oldPassword, newPassword } = req.body
 
-    const user = await User.findById(req.user?._id)
+    const user = await User.findById(req.user._id)
     const isPasswordCorrect = await user.isPasswordCorrect(oldPassword)
 
     if (!isPasswordCorrect) {
@@ -212,15 +216,19 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
 
 const getCurrentUser = asyncHandler(async (req, res) => {
 
+    let profile
     if(req.user.role === "caretaker"){
-        req.user.profile = await CaretakerProfile.findOne({userId: req.user._id})
+        profile = await CaretakerProfile.findOne({userId: req.user._id})
     }else if(req.user.role === "elderly"){
-        req.user.profile = await ElderlyProfile.findOne({userId: req.user._id})
+        profile = await ElderlyProfile.findOne({userId: req.user._id})
     }
+    const user = {...req.user.toObject(), profile}
 
     return res
         .status(200)
-        .json(200, req.user, "current user fetched successfully")
+        .json(
+            new ApiResponse(200, user, "current user fetched successfully")
+        )
 })
 
 const getUserById = asyncHandler(async(req, res) =>{
@@ -232,17 +240,20 @@ const getUserById = asyncHandler(async(req, res) =>{
     if(!user){
         throw new ApiError(404, "user not found")
     }  
-
+     
+    let profile
     if(user.role === "caretaker"){
-        user.profile = await CaretakerProfile.findOne({userId: userId})
+        profile = await CaretakerProfile.findOne({userId: userId})
     }else if(user.role === "elderly"){
-        user.profile = await ElderlyProfile.findOne({userId: userId})
+        profile = await ElderlyProfile.findOne({userId: userId})
     }
+
+    const result = {user,profile}
 
     res
     .status(200)
     .json(
-        new ApiResponse(200, user, "user profile fetched successfully")
+        new ApiResponse(200, result, "user profile fetched successfully")
     )
 })
 
@@ -276,8 +287,7 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, user, "Account details updated successfully"))
 })
 
-const updateUserAvatar = asyncHandler(async (req, res) => {
-
+const updateUserAvatar = asyncHandler(async(req, res) => {
     const avatarLocalPath = req.file?.path
 
     if (!avatarLocalPath) {
@@ -287,25 +297,27 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
     const avatar = await uploadOnCloudinary(avatarLocalPath)
 
     if (!avatar.url) {
-        throw new ApiError(400, "Error while uploading avatar")
+        throw new ApiError(400, "Error while uploading on avatar")
+        
     }
+
+    await deleteFromCloudinary(req.user.avatar)
 
     const user = await User.findByIdAndUpdate(
         req.user?._id,
         {
-            $set: {
+            $set:{
                 avatar: avatar.url
             }
         },
-        { new: true }
+        {new: true}
     ).select("-password")
 
     return res
-        .status(200)
-        .json(
-            new ApiResponse(200, user, "Avatar updated successfully")
-        )
-
+    .status(200)
+    .json(
+        new ApiResponse(200, user, "Avatar image updated successfully")
+    )
 })
 
 export {

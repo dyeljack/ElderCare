@@ -2,7 +2,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js"
 import { HealthRecord } from "../models/healthRecord.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
-import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import { uploadOnCloudinary,deleteFromCloudinary } from "../utils/cloudinary.js";
 
 
 const createHealthRecord = asyncHandler(async (req, res) => {
@@ -36,13 +36,13 @@ const createHealthRecord = asyncHandler(async (req, res) => {
     })
 
     return res.status(201).json(
-        new ApiResponse(201, createdUser, "Health Record Created successfully")
+        new ApiResponse(201, healthRecord, "Health Record Created successfully")
     )
 })
 
 const getHealthRecords = asyncHandler(async (req, res) => {
 
-    const record = await HealthRecord.find({userId: req.user.id})
+    const record = await HealthRecord.find({userId: req.elderlyId})
 
     return res
         .status(200)
@@ -76,7 +76,7 @@ const updateHealthRecord = asyncHandler(async (req, res) => {
         if (!file) {
             new ApiError(500, "failed to upload file")
         }
-        await deleteFromCloudinary(HealthRecord.file)
+        await deleteFromCloudinary(healthRecord.file)
     }
 
     if (title) healthRecord.title = title

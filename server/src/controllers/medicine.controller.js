@@ -2,7 +2,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js"
 import { Medicine } from "../models/medicine.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
-import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import { deleteFromCloudinary, uploadOnCloudinary } from "../utils/cloudinary.js";
 
 const createMedicine = asyncHandler(async (req, res) => {
     const { name, description } = req.body;
@@ -14,7 +14,7 @@ const createMedicine = asyncHandler(async (req, res) => {
         throw new ApiError(400, "All fields are required")
     }
 
-        const imageLocalPath = req.files?.image[0]?.path;
+        const imageLocalPath = req.file?.path;
         let image;
     
         if(imageLocalPath){
@@ -75,7 +75,7 @@ const deleteMedicine = asyncHandler(async(req, res) =>{
 
     const medicine = await Medicine.findById(medicineId)
 
-    if(medicine.createdBy !== req.user._id && req.user.role !== "admin"){
+    if(medicine.createdBy.toString() !== req.user._id.toString() && req.user.role !== "admin"){
         throw new ApiError(403, "you are not authorized to delete this medicine")
     }
 

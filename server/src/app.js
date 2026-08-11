@@ -32,5 +32,6 @@ app.use("/api/v1/reminder", reminderRouter)
 app.use("/api/v1/medicine", medicineRouter)
 app.use("/api/v1/appointment", appointmentRouter)
 app.use("/api/v1/emergency", emergencyRouter)
+app.use("/api/v1/healthRecord", healthRecordRouter)
 
 export { app }

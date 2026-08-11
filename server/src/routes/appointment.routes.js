@@ -11,15 +11,15 @@ import {
 
 const router = Router()
 
-router.use(verifyJWT, authorizeRelation)
+router.use(verifyJWT)
 
 router.route("/:elderlyId")
-    .post(createAppointment)
-    .get(getUserAppointments);
+    .post(authorizeRelation, createAppointment)
+    .get(authorizeRelation, getUserAppointments);
 
-router.route("/:appointmentId")
-    .patch(updateAppointment)
-    .delete(deleteAppointment);
+router.route("/:elderlyId/:appointmentId")
+    .patch(authorizeRelation, updateAppointment)
+    .delete(authorizeRelation, deleteAppointment);
 
 router.route("/history/:elderlyId").get(getAppointmentHistory)
 

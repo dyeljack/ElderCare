@@ -7,7 +7,7 @@ import { Relationship } from "../models/relationship.model.js";
 const sendRequest = asyncHandler(async (req, res) => {
 
     const { elderlyNumber } = req.params
-    const { startDate, endDate } = req.body;
+    const { startDate = null, endDate = null } = req.body || {};
 
     if (elderlyNumber.trim() === "") {
         throw new ApiError(400, "Elderly Phone Number is required")
@@ -57,12 +57,12 @@ const acceptRequest = asyncHandler(async (req, res) => {
             status: "pending"
         },
         {
-            $set:{
+            $set: {
                 status: "active"
             }
         },
         {
-            new:true
+            new: true
         }
     )
 
@@ -100,10 +100,45 @@ const getPendingRequest = asyncHandler(async (req, res) => {
         ? "elderlyId"
         : "relatedUserId";
 
-    const relation = await Relationship.find({
-        [userId]: req.user._id,
-        status: "pending"
-    })
+     const relatedUserId = req.user.role === "elderly"
+       ? "relatedUserId"
+        : "elderlyId";    
+
+    const relation = await Relationship.aggregate([
+        {
+            $match: {
+                [userId]: req.user._id,
+                status: "pending"
+            }
+        },
+        {
+            $lookup:{
+                from: "users",
+                localField: relatedUserId,
+                foreignField: "_id",
+                as: "user",
+                pipeline:[
+                           {
+                        $project:{
+                            firstName:1,
+                            lastName:1,
+                            avatar:1,
+                            role:1,
+                        }
+                }
+                ]
+            }
+        },
+        {
+            $project:{
+                _id: 1,
+                startDate:1,
+                endDate:1,
+                createdAt:1,
+                user: 1
+            }
+        },
+    ])
 
     if (!relation) {
         throw new ApiError(404, "no pending requests found")
