@@ -7,8 +7,8 @@ const createAppointment = asyncHandler(async (req, res) => {
     const { title, description, time, location, address } = req.body; // elderly Id from middleware
 
     if (
-        [title, description, address].some((field) =>
-            field?.trim() === "") || !location.latitute || !location.longitude || !time
+        [title, description, address, time].some((field) =>
+            field?.trim() === "") || !location.latitude || !location.longitude
     ) {
         throw new ApiError(400, "All fields are required")
     }
@@ -34,25 +34,30 @@ const createAppointment = asyncHandler(async (req, res) => {
 })
 
 const updateAppointment = asyncHandler(async (req, res) => {
-    const { title, description, time, location, address } = req.body 
+
+    const {appointmentId} = req.params
+    const { title, description, time, location, address } = req.body
 
     if (!(title || description || time || location.latitude || location.longitude || address)) {
         throw new ApiError(400, "Atleast one field is required")
     }
 
     const appointment = await Appointment.findOneAndUpdate(
-        { userId: req.elderlyId,
+        {
+            _id: appointmentId,
             status: "active"
-         },
+        },
         {
             $set: {
                 title,
                 description,
                 time,
-                location:{
-                    latitude: location.latitude,
-                    longitude: location.longitude
-                },
+                ...(location && {
+                    location: {
+                        latitude: location.latitude,
+                        longitude: location.longitude
+                    }
+                }),
                 address,
                 createdBy: req.user._id
             }
@@ -65,47 +70,53 @@ const updateAppointment = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, appointment, "Appointment updated successfully"))
 })
 
-const deleteAppointment = asyncHandler(async(req,res) =>{
+const deleteAppointment = asyncHandler(async (req, res) => {
+
+    const {appointmentId} = req.params
 
     const appointment = await Appointment.findOneAndDelete({
+        _id: appointmentId,
+        status: "active"
+    })
+
+    if(!appointment){
+        throw new ApiError(404, "appointment not found")
+    }
+
+    res
+        .status(200)
+        .json(
+            new ApiResponse(200, `appointment ${appointment.title} deleted successfully`)
+        )
+})
+
+const getUserAppointments = asyncHandler(async (req, res) => {
+
+    const appointment = await Appointment.find({
         userId: req.elderlyId,
         status: "active"
     })
 
     res
-    .status(200)
-    .json(
-        new ApiResponse(200, `appointment ${appointment.title} deleted successfully`)
-    )
-})
-
-const getUserAppointments = asyncHandler(async(req, res)=>{
-
-    const appointment = await Appointment.find({
-        userId: req.elderlyId,
-        status: "active"     
-    })
-
-     res
-    .status(200)
-    .json(
-        new ApiResponse(200, appointment, "appointment fetched successfully")
-    )
+        .status(200)
+        .json(
+            new ApiResponse(200, appointment, "appointment fetched successfully")
+        )
 
 })
 
-const getAppointmentHistory = asyncHandler(async(req, res)=>{
+const getAppointmentHistory = asyncHandler(async (req, res) => {
 
     const appointment = await Appointment.find({
         userId: req.elderlyId,
-        status: "completed"     
+        status: "completed"
     })
 
-     res
-    .status(200)
-    .json(
-        new ApiResponse(200, appointment, "appointment history fetched successfully")
-    )
+    res
+        .status(200)
+        .json(
+            new ApiResponse(200, appointment, "appointment history fetched successfully")
+        )
 
 })
 

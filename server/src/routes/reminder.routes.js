@@ -6,15 +6,15 @@ import { createReminder, deleteReminder, getReminderHistory, getUserReminders, u
 
 const router = Router()
 
-router.use(verifyJWT, authorizeRelation)
+router.use(verifyJWT)
 
 router.route("/:elderlyId")
-    .post(createReminder)
-    .get(getUserReminders);
+    .post(authorizeRelation, createReminder)
+    .get(authorizeRelation, getUserReminders);
 
-router.route("/:reminderId")
-    .patch(updateReminder)
-    .delete(deleteReminder);
+router.route("/:elderlyId/:reminderId")
+    .patch(authorizeRelation, updateReminder)
+    .delete(authorizeRelation, deleteReminder);
 
 router.route("/history/:elderlyId").get(getReminderHistory)
 

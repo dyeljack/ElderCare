@@ -25,6 +25,13 @@ const reminderSchema = new Schema({
     },
     frequency: {
         type: String,
+        enum: [
+            "daily",
+            "every_other_day",
+            "weekly",
+            "monthly",
+            "as_needed"
+        ],
         required: true
     },
     dosage: {
