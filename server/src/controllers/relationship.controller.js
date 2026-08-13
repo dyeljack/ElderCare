@@ -180,7 +180,7 @@ const getRelatedUser = asyncHandler(async (req, res) => {
     res
         .status(200)
         .json(
-            new ApiResponse(200, relatedUsers, "related elders fetched successfully")
+            new ApiResponse(200, relatedUsers, "related users fetched successfully")
         )
 
 })

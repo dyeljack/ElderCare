@@ -148,7 +148,7 @@ const addTimeslot = asyncHandler(async(req,res) =>{
      }
    });
 
-   const timeslot = await Timeslot.create({
+   const newTimeslot = await Timeslot.create({
     timeslot,
     days,
     userId: req.user._id
@@ -157,7 +157,7 @@ const addTimeslot = asyncHandler(async(req,res) =>{
    res
    .status(201)
    .json(
-    new ApiResponse(201, timeslot, "timeslot added successfully")
+    new ApiResponse(201, newTimeslot, "timeslot added successfully")
    )
 
 
@@ -166,6 +166,11 @@ const addTimeslot = asyncHandler(async(req,res) =>{
 const updateTimeslot = asyncHandler(async (req, res) => {
     const { timeslot, days } = req.body;
     const { timeslotId } = req.params;
+
+
+     if(!days?.length || !timeslot?.length){
+    throw new ApiError(400, "all fields are required")
+   }
 
     timeslot.forEach(element => {
         if (
@@ -176,10 +181,6 @@ const updateTimeslot = asyncHandler(async (req, res) => {
             throw new ApiError(400, "timeslot structure is invalid");
         }
     });
-
-    if (!days?.length) {
-        throw new ApiError(400, "days are required");
-    }
 
     const updatedTimeslot = await Timeslot.findOneAndUpdate(
         {

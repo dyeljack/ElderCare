@@ -222,7 +222,7 @@ const getCurrentUser = asyncHandler(async (req, res) => {
         profile = await CaretakerProfile.aggregate([
             {
                 $match: {
-                    _id: new mongoose.Types.ObjectId(req.user._id)
+                    userId: new mongoose.Types.ObjectId(req.user._id)
                 }
             },
             {
@@ -274,7 +274,7 @@ const getUserById = asyncHandler(async (req, res) => {
          profile = await CaretakerProfile.aggregate([
             {
                 $match: {
-                    _id: new mongoose.Types.ObjectId(req.user._id)
+                    userId: new mongoose.Types.ObjectId(req.user._id)
                 }
             },
             {

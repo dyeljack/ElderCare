@@ -7,13 +7,13 @@ const router = Router()
 
 router.use(verifyJWT)
 
-router.route("/")
+router.route("/:caretakerId")
 .post(authorizeRole("elderly"), createRating)
+.get(getCaretakerRatings)
+
+router.route("/:ratingId")
 .patch(authorizeRole("elderly"), updateRating)
 .delete(authorizeRole("elderly"), deleteRating)
-
-router.route("/:caretakerId").get(getCaretakerRatings)
-
 
 
 export default router

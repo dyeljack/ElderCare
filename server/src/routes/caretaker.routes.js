@@ -22,6 +22,8 @@ router.route("/")
 
 router.route("/timeslot")
 .post(authorizeRole("caretaker"), addTimeslot)
+
+router.route("/timeslot/:timeslotId")
 .patch(authorizeRole("caretaker"), updateTimeslot)
 
 router.route("/forHire").patch(authorizeRole("caretaker"), toggleForHireStatus)
