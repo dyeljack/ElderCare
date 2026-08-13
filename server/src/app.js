@@ -23,6 +23,7 @@ import medicineRouter from './routes/medicine.routes.js'
 import appointmentRouter from './routes/appointment.routes.js'
 import emergencyRouter from './routes/emergency.routes.js'
 import healthRecordRouter from './routes/healthRecord.routes.js'
+import ratingRouter from './routes/rating.routes.js'
 
 // routes declaration
 app.use("/api/v1/users", userRouter)
@@ -33,5 +34,6 @@ app.use("/api/v1/medicine", medicineRouter)
 app.use("/api/v1/appointment", appointmentRouter)
 app.use("/api/v1/emergency", emergencyRouter)
 app.use("/api/v1/healthRecord", healthRecordRouter)
+app.use("/api/v1/rating", ratingRouter)
 
 export { app }

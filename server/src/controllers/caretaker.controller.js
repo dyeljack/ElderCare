@@ -3,6 +3,7 @@ import { ApiError } from "../utils/ApiError.js"
 import { CaretakerProfile } from "../models/caretaker.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { refreshAccessToken } from "./user.controller.js";
+import { Timeslot } from "../models/timeslot.model.js";
 
 const registerCaretaker = asyncHandler(async (req, res) => {
     const { language, yoe, skills } = req.body;
@@ -132,9 +133,82 @@ const getAllCaretakersForHire = asyncHandler(async(req, res)=>{
     )
 })
 
+const addTimeslot = asyncHandler(async(req,res) =>{
+
+    const {timeslot, days} = req.body
+
+     if(!days?.length || !timeslot?.length){
+    throw new ApiError(400, "all fields are required")
+   }
+
+
+   timeslot.forEach(element => {
+     if( !element.startTime || !element.endTime || Object.keys(element).length !== 2){
+         throw new ApiError(400, "timeslot structure is invalid")
+     }
+   });
+
+   const timeslot = await Timeslot.create({
+    timeslot,
+    days,
+    userId: req.user._id
+   })
+
+   res
+   .status(201)
+   .json(
+    new ApiResponse(201, timeslot, "timeslot added successfully")
+   )
+
+
+})
+
+const updateTimeslot = asyncHandler(async (req, res) => {
+    const { timeslot, days } = req.body;
+    const { timeslotId } = req.params;
+
+    timeslot.forEach(element => {
+        if (
+            !element.startTime ||
+            !element.endTime ||
+            Object.keys(element).length !== 2
+        ) {
+            throw new ApiError(400, "timeslot structure is invalid");
+        }
+    });
+
+    if (!days?.length) {
+        throw new ApiError(400, "days are required");
+    }
+
+    const updatedTimeslot = await Timeslot.findOneAndUpdate(
+        {
+            _id: timeslotId,
+            userId: req.user._id
+        },
+        {
+            timeslot,
+            days
+        },
+        { new: true, runValidators: true }
+    );
+
+    if (!updatedTimeslot) {
+        throw new ApiError(404, "timeslot not found");
+    }
+
+    res
+        .status(200)
+        .json(
+            new ApiResponse(200, updatedTimeslot, "timeslot updated successfully")
+        );
+});
+
 export {
     registerCaretaker,
     updateCaretakerProfile,
     toggleForHireStatus,
-    getAllCaretakersForHire
+    getAllCaretakersForHire,
+    addTimeslot,
+    updateTimeslot
 }

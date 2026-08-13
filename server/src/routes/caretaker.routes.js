@@ -2,7 +2,9 @@ import { Router } from "express";
 import {
     registerCaretaker,
     updateCaretakerProfile,
-    toggleForHireStatus
+    toggleForHireStatus,
+    addTimeslot,
+    updateTimeslot
 } from "../controllers/caretaker.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { authorizeRole } from "../middlewares/authorizeRole.middleware.js";
@@ -17,6 +19,10 @@ router.use(verifyJWT)
 router.route("/")
 .post(authorizeRole("caretaker"), registerCaretaker)
 .patch(authorizeRole("caretaker"), updateCaretakerProfile)
+
+router.route("/timeslot")
+.post(authorizeRole("caretaker"), addTimeslot)
+.patch(authorizeRole("caretaker"), updateTimeslot)
 
 router.route("/forHire").patch(authorizeRole("caretaker"), toggleForHireStatus)
 

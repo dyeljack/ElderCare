@@ -5,6 +5,7 @@ import { uploadOnCloudinary, deleteFromCloudinary } from "../utils/cloudinary.js
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { CaretakerProfile } from "../models/caretaker.model.js";
 import { ElderlyProfile } from "../models/elderly.model.js";
+import mongoose from "mongoose";
 
 const generateAccessAndRefreshTokens = async (userId) => {
     try {
@@ -35,7 +36,7 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new ApiError(400, "All fields are required")
     }
 
-    if(role === "admin"){
+    if (role === "admin") {
         throw new ApiError(403, "you can't register as admin")
     }
 
@@ -217,12 +218,39 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
 const getCurrentUser = asyncHandler(async (req, res) => {
 
     let profile
-    if(req.user.role === "caretaker"){
-        profile = await CaretakerProfile.findOne({userId: req.user._id})
-    }else if(req.user.role === "elderly"){
-        profile = await ElderlyProfile.findOne({userId: req.user._id})
+    if (req.user.role === "caretaker") {
+        profile = await CaretakerProfile.aggregate([
+            {
+                $match: {
+                    _id: new mongoose.Types.ObjectId(req.user._id)
+                }
+            },
+            {
+                $lookup: {
+                    from: "timeslots",
+                    localField: "userId",
+                    foreignField: "userId",
+                    as: "timeslots",
+                    pipeline: [
+                        {
+                            $project: {
+                                userId: 0
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                $project: {
+                    userId: 0
+                }
+            },
+        ])
+
+    } else if (req.user.role === "elderly") {
+        profile = await ElderlyProfile.findOne({ userId: req.user._id })
     }
-    const user = {...req.user.toObject(), profile}
+    const user = { ...req.user.toObject(), profile }
 
     return res
         .status(200)
@@ -231,30 +259,56 @@ const getCurrentUser = asyncHandler(async (req, res) => {
         )
 })
 
-const getUserById = asyncHandler(async(req, res) =>{
+const getUserById = asyncHandler(async (req, res) => {
 
-    const { userId } = req.params 
-    
+    const { userId } = req.params
+
     let user = await User.findById(userId).select("-password -refreshToken")
 
-    if(!user){
+    if (!user) {
         throw new ApiError(404, "user not found")
-    }  
-     
-    let profile
-    if(user.role === "caretaker"){
-        profile = await CaretakerProfile.findOne({userId: userId})
-    }else if(user.role === "elderly"){
-        profile = await ElderlyProfile.findOne({userId: userId})
     }
 
-    const result = {user,profile}
+    let profile
+    if (user.role === "caretaker") {
+         profile = await CaretakerProfile.aggregate([
+            {
+                $match: {
+                    _id: new mongoose.Types.ObjectId(req.user._id)
+                }
+            },
+            {
+                $lookup: {
+                    from: "timeslots",
+                    localField: "userId",
+                    foreignField: "userId",
+                    as: "timeslots",
+                    pipeline: [
+                        {
+                            $project: {
+                                userId: 0
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                $project: {
+                    userId: 0
+                }
+            },
+        ])
+    } else if (user.role === "elderly") {
+        profile = await ElderlyProfile.findOne({ userId: userId })
+    }
+
+    const result = { user, profile }
 
     res
-    .status(200)
-    .json(
-        new ApiResponse(200, result, "user profile fetched successfully")
-    )
+        .status(200)
+        .json(
+            new ApiResponse(200, result, "user profile fetched successfully")
+        )
 })
 
 const updateAccountDetails = asyncHandler(async (req, res) => {
@@ -287,7 +341,7 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, user, "Account details updated successfully"))
 })
 
-const updateUserAvatar = asyncHandler(async(req, res) => {
+const updateUserAvatar = asyncHandler(async (req, res) => {
     const avatarLocalPath = req.file?.path
 
     if (!avatarLocalPath) {
@@ -298,7 +352,7 @@ const updateUserAvatar = asyncHandler(async(req, res) => {
 
     if (!avatar.url) {
         throw new ApiError(400, "Error while uploading on avatar")
-        
+
     }
 
     await deleteFromCloudinary(req.user.avatar)
@@ -306,18 +360,18 @@ const updateUserAvatar = asyncHandler(async(req, res) => {
     const user = await User.findByIdAndUpdate(
         req.user?._id,
         {
-            $set:{
+            $set: {
                 avatar: avatar.url
             }
         },
-        {new: true}
+        { new: true }
     ).select("-password")
 
     return res
-    .status(200)
-    .json(
-        new ApiResponse(200, user, "Avatar image updated successfully")
-    )
+        .status(200)
+        .json(
+            new ApiResponse(200, user, "Avatar image updated successfully")
+        )
 })
 
 export {

@@ -13,14 +13,14 @@ const createRating = asyncHandler(async (req, res) => {
     }
 
     const relation = await Relationship.findOne({
-            relatedUserId: caretakerId,
-            elderlyId: req.user_id,
-            status: { $in: ["active", "completed"] },
-            type: "caretaker"
-        }
+        relatedUserId: caretakerId,
+        elderlyId: req.user_id,
+        status: { $in: ["active", "completed"] },
+        type: "caretaker"
+    }
     )
 
-    if(!relation){
+    if (!relation) {
         throw new ApiError(401, "You are not authorized to rate this caretaker")
     }
 
@@ -46,58 +46,64 @@ const createRating = asyncHandler(async (req, res) => {
 
 )
 
-const updateRating = asyncHandler(async(req, res) =>{
+const updateRating = asyncHandler(async (req, res) => {
 
-    const {ratingId} = req.params
-    const {rating, review } = req.body
+    const { ratingId } = req.params
+    const { rating, review } = req.body
 
-       if (!(rating?.trim() || review?.trim())) {
-            throw new ApiError(400, "atleast 1 field is required")
-        }
+    if (!(rating?.trim() || review?.trim())) {
+        throw new ApiError(400, "atleast 1 field is required")
+    }
 
     const rating = await Rating.findOneAndUpdate(
-        {_id: ratingId},
         {
-            $set:{
+            _id: ratingId,
+            createdBy: req.user._id
+        },
+        {
+            $set: {
                 rating,
                 review
             }
         },
-        {new: true}
+        { new: true }
     )
-    
-      return res.status(200).json(
+
+    return res.status(200).json(
         new ApiResponse(200, rating, "Rating updated successfully")
     )
 })
 
-const deleteRating = asyncHandler(async(req, res) =>{
+const deleteRating = asyncHandler(async (req, res) => {
 
-    const {ratingId} = req.params
+    const { ratingId } = req.params
 
-    const rating = await Rating.findByIdAndDelete(ratingId)
+    const rating = await Rating.findOneAndDelete({
+        _id: ratingId,
+        createdBy: req.user._id
+    })
 
-       return res.status(200).json(
+    return res.status(200).json(
         new ApiResponse(200, rating, `Rating \"${rating.review}\" deleted successfully`)
     )
 })
 
-const getAllCaretakerRatings = asyncHandler(async(req, res) =>{
+const getCaretakerRatings = asyncHandler(async (req, res) => {
 
-    const {caretakerId} = req.params 
+    const { caretakerId } = req.params
 
-    const rating = await Rating.find({caretakerId})
+    const rating = await Rating.find({ caretakerId })
 
-         return res.status(200).json(
+    return res.status(200).json(
         new ApiResponse(200, rating, "Ratings fetched successfully")
     )
-    
-    
+
+
 })
 
-export { 
+export {
     createRating,
     updateRating,
     deleteRating,
-    getCaretakerAllRatings
- }
+    getCaretakerRatings
+}

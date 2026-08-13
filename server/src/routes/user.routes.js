@@ -12,7 +12,7 @@ import {
 } from "../controllers/user.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
-import { getPendingRequest } from "../controllers/relationship.controller.js";
+import { deleteRelation, getPendingRequest, getRelatedUser } from "../controllers/relationship.controller.js";
 
 const router = Router()
 
@@ -33,5 +33,7 @@ router.route("/change-avatar").patch(verifyJWT, upload.single("avatar"), updateU
 router.route("/getUserById/:userId").get(verifyJWT, getUserById)
 
 router.route("/pendingRequest").get(verifyJWT, getPendingRequest)
+router.route("/deleteRelation/:relationId").delete(verifyJWT, deleteRelation)
+router.route("/relatedUsers").get(verifyJWT, getRelatedUser)
 
 export default router
