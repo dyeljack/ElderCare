@@ -102,6 +102,8 @@ const deleteHealthRecord = asyncHandler(async (req, res) => {
         userId: req.user._id
       })
 
+      await deleteFromCloudinary(healthRecord.file)
+
       res
       .status(200)
       .json(

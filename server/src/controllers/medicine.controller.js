@@ -14,19 +14,19 @@ const createMedicine = asyncHandler(async (req, res) => {
         throw new ApiError(400, "All fields are required")
     }
 
-        const imageLocalPath = req.file?.path;
-        let image;
-    
-        if(imageLocalPath){
-    
-           image = await uploadOnCloudinary(imageLocalPath)
+    const imageLocalPath = req.file?.path;
+    let image;
 
-           if (!image) {
+    if (imageLocalPath) {
+
+        image = await uploadOnCloudinary(imageLocalPath)
+
+        if (!image) {
             throw new ApiError(400, "Failed to upload image")
         }
 
-        }
-    
+    }
+
     const medicine = await Medicine.create({
         name,
         image: image?.url,
@@ -43,56 +43,58 @@ const createMedicine = asyncHandler(async (req, res) => {
 
 )
 
-const getMedicineById = asyncHandler(async(req, res) =>{
+const getMedicineById = asyncHandler(async (req, res) => {
 
     const { medicineId } = req.params
 
     const medicine = await Medicine.findById(medicineId)
 
     res
-    .status(200)
-    .json(
-        new ApiResponse(200, medicine, "medicine fetched successfully")
-    )
-    
+        .status(200)
+        .json(
+            new ApiResponse(200, medicine, "medicine fetched successfully")
+        )
+
 })
 
-const getAllMedicines = asyncHandler(async(req, res) =>{
+const getAllMedicines = asyncHandler(async (req, res) => {
 
     const medicine = await Medicine.find({})
 
     res
-    .status(200)
-    .json(
-        new ApiResponse(200, medicine, "all medicines fetched successfully")
-    )
-    
+        .status(200)
+        .json(
+            new ApiResponse(200, medicine, "all medicines fetched successfully")
+        )
+
 })
 
-const deleteMedicine = asyncHandler(async(req, res) =>{
+const deleteMedicine = asyncHandler(async (req, res) => {
 
     const { medicineId } = req.params
 
     const medicine = await Medicine.findById(medicineId)
 
-    if(medicine.createdBy.toString() !== req.user._id.toString() && req.user.role !== "admin"){
+    if (medicine.createdBy.toString() !== req.user._id.toString() && req.user.role !== "admin") {
         throw new ApiError(403, "you are not authorized to delete this medicine")
     }
 
+
     await medicine.deleteOne()
+    if (medicine.image) await deleteFromCloudinary(medicine.image)
 
     res
-    .status(200)
-    .json(
-        new ApiResponse(200, `medicine ${medicine.name} deleted successfully`)
-    )
+        .status(200)
+        .json(
+            new ApiResponse(200, `medicine ${medicine.name} deleted successfully`)
+        )
 
-  
+
 })
 
-export { 
+export {
     createMedicine,
     getMedicineById,
     getAllMedicines,
     deleteMedicine
- }
+}
