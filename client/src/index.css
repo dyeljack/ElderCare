@@ -1,4 +1,76 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --bg-app: #f8fafc;
+  --bg-sidebar: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f1f5f9;
+  --text-main: #334155;
+  --text-heading: #0f172a;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+  --brand-primary: #2563eb;
+  --brand-primary-hover: #1d4ed8;
+  --brand-primary-light: #eff6ff;
+  --accent-emergency: #dc2626;
+  --status-normal-bg: #d1fae5;
+  --status-normal-text: #065f46;
+  --status-warning-bg: #fef3c7;
+  --status-warning-text: #92400e;
+  --card-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.05), 0 1px 2px -1px rgba(15, 23, 42, 0.03);
+}
+
+.dark, [data-theme="dark"] {
+  --bg-app: #0b1329;
+  --bg-sidebar: #131c36;
+  --bg-card: #152244;
+  --bg-card-hover: #1c2e5c;
+  --text-main: #e2e8f0;
+  --text-heading: #ffffff;
+  --text-muted: #94a3b8;
+  --border-color: #243566;
+  --brand-primary: #3b82f6;
+  --brand-primary-hover: #60a5fa;
+  --brand-primary-light: #1e3a8a;
+  --accent-emergency: #ef4444;
+  --status-normal-bg: #064e3b;
+  --status-normal-text: #6ee7b7;
+  --status-warning-bg: #78350f;
+  --status-warning-text: #fde68a;
+  --card-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.35);
+}
+
+.theme-bg-app { background-color: var(--bg-app); }
+.theme-bg-sidebar { background-color: var(--bg-sidebar); }
+.theme-bg-card { 
+  background-color: var(--bg-card); 
+  box-shadow: var(--card-shadow);
+}
+.theme-bg-card-hover:hover { background-color: var(--bg-card-hover); }
+.theme-text-main { color: var(--text-main); }
+.theme-text-heading { color: var(--text-heading); }
+.theme-text-muted { color: var(--text-muted); }
+.theme-border { border-color: var(--border-color); }
+.theme-brand-bg { background-color: var(--brand-primary); }
+.theme-brand-text { color: var(--brand-primary); }
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-app);
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+
+
 * {
   margin: 0;
   padding: 0;
@@ -7,7 +79,11 @@
 }
 
 body {
-  background: linear-gradient(135deg, #dbeafe, #cffafe);
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  -webkit-font-smoothing: antialiased;
 }
 
 .register-container {
