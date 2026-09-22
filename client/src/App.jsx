@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Register from "./components/register";
 import Login from "./components/login";
 import Elderly from "./components/Dashboards/ElderDashboard/Elderlydashboard";
+import Caregiver from "./components/Dashboards/CaretakerDashboard/caregiver-dashboard";
 import { Sidebar } from 'lucide-react'
 
 
@@ -20,7 +21,8 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/elder-dashboard" element={<Elderly />} />
-          
+          <Route path="/caregiver-dashboard" element={<Caregiver />} />
+          {/* <Route path="/admin-dashboard" element={<Admin />} /> */}
         </Routes>
       </BrowserRouter>
     </>

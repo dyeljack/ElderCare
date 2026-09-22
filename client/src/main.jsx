@@ -5,6 +5,7 @@ import App from './App.jsx'
 import Register from './components/register.jsx'
 import Login from './components/login.jsx'
 import Elderly from './components/Dashboards/ElderDashboard/Elderlydashboard.jsx'
+import Caregiver from './components/Dashboards/CaretakerDashboard/caregiver-dashboard.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
